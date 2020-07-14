@@ -25,7 +25,7 @@ A model realization of the gravitational lensing convergence field around the ob
 2033-4723. Tens of millions of such realizations were generated to quantify how frequently different masses of warm dark matter
 particle would produce gravitational lensing magnifications similar to those observed. From [Gilman, AJB, et al. (2020, MNRAS,
 491, 6077)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.491.6077G/abstract).
-<p style="margin-bottom: 30px;">
+<br>
 
 ### Suppresion of Dark Matter Halo Growth by Baryons
 
@@ -35,7 +35,7 @@ The power spectrum of matter in a universe containing both baryons and dark matt
 universe.  These calculations are being used to quantify how baryons reduce the number of low mass dark matter halos that form - a
 crucial input to observational programs which aim to measure the nature of dark matter. From [Benson (2020, MNRAS, 493,
 1268)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.493.1268B/abstract).
-<p style="margin-bottom: 60px;">
+<br>
 
 ## Galaxies
 
@@ -47,11 +47,11 @@ The extinction as a function of wavelength caused by dust in a suite of model ga
 is an input ingredient in the construction of simulated surveys for future telescopes. The extinction curves shown were computed
 using a Monte Carlo radiative transfer code. From [Benson (2018, RNAAS, 2,
 188)](https://ui.adsabs.harvard.edu/abs/2018RNAAS...2..188B/abstract).
-<p style="margin-bottom: 30px;">
+<br>
 
 ### Emission Line Galaxy Survey Predictions for the Roman Space Telescope
 
 <img src="./assets/img/elgCounts.png" alt="emission line galaxy counts" style="width:256px; float: right; margin-left: 15px;"/> 
 
 Predictions for the number of \[O II\] emission line galaxies from the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) model compared with observational data. [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) is being used to build synthetic surveys of emission line galaxies for the [Roman Space Telescope](https://roman.gsfc.nasa.gov/). From [Zhai, AJB, et al. (2019; MNRAS; 490; 3667)](https://ui.adsabs.harvard.edu/abs/2019MNRAS.490.3667Z/abstract).
-<p style="margin-bottom: 30px;">
+<br>
