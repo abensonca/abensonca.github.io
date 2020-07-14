@@ -17,6 +17,6 @@ You can learn more about current and former members of my research team [here](.
 
 ## Dark Matter
 
-![Constraints on the particle mass of Warm Dark Matter](./assets/img/lensing.png)
+![gravitational quad lens](./assets/img/lensing.png =100x100)
 
 ### Galaxies
