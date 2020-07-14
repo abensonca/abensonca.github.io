@@ -17,6 +17,6 @@ You can learn more about current and former members of my research team [here](.
 
 ## Dark Matter
 
-![gravitational quad lens](./assets/img/lensing.png =100x100)
+<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:128px;"/>
 
 ### Galaxies
