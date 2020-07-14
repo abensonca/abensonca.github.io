@@ -19,11 +19,23 @@ You can learn more about current and former members of my research team [here](.
 
 ### Constraining the Particle Mass of Warm Dark Matter
 
-<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px; float: left; padding: 15px;"/> 
+<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px; float: left; margin-right: 15px;"/> 
 
 A model realization of the gravitational lensing convergence field around the observed gravitational quad-lens system WFI
 2033-4723. Tens of millions of such realizations were generated to quantify how frequently different masses of warm dark matter
 particle would produce gravitational lensing magnifications similar to those observed. From [Gilman, AJB, et al. (2020, MNRAS,
 491, 6077)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.491.6077G/abstract).
 
-### Galaxies
+
+
+
+### Suppresion of Dark Matter Halo Growth by Baryons
+
+<img src="./assets/img/power_spectrum.png" alt="gravitational quad lens" style="width:256px; float: right; margin-left: 15px;"/> 
+
+The power spectrum of matter in a universe containing both baryons and dark matter, relative to that in a pure dark matter
+universe.  These calculations are being used to quantify how baryons reduce the number of low mass dark matter halos that form - a
+crucial input to observational programs which aim to measure the nature of dark matter. From [Benson (2020, MNRAS, 493,
+1268)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.493.1268B/abstract).
+
+## Galaxies
