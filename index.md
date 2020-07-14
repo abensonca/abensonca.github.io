@@ -19,13 +19,11 @@ You can learn more about current and former members of my research team [here](.
 
 ### Constraining the Particle Mass of Warm Dark Matter
 
-<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px; float: left;"/> 
+<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px; float: left; padding: 15px;"/> 
 
-A model realization of the gravitational lensing convergence 
-field around the observed gravitational quad-lens system WFI 2033-4723. Tens of 
-millions of such realizations were generated to quantify how frequently 
-different types of dark matter would produce gravitational lensing 
-magnifications similar to those observed. From [Gilman, AJB, et al. (2020, 
-MNRAS, 491, 6077)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.491.6077G/abstract).
+A model realization of the gravitational lensing convergence field around the observed gravitational quad-lens system WFI
+2033-4723. Tens of millions of such realizations were generated to quantify how frequently different masses of warm dark matter
+particle would produce gravitational lensing magnifications similar to those observed. From [Gilman, AJB, et al. (2020, MNRAS,
+491, 6077)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.491.6077G/abstract).
 
 ### Galaxies
