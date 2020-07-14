@@ -19,7 +19,7 @@ You can learn more about current and former members of my research team [here](.
 
 ### Constraining the Particle Mass of Warm Dark Matter
 
-<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px;"/> 
+<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px; float: left;"/> 
 
 A model realization of the gravitational lensing convergence 
 field around the observed gravitational quad-lens system WFI 2033-4723. Tens of 
