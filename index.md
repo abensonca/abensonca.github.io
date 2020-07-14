@@ -59,7 +59,7 @@ Predictions for the number of \[O II\] emission line galaxies from the [_Galacti
 
 ### Synthetic Skies for the Legacy Survey of Space and Time on the Rubin Observatory
 
-<img src="./assets/img/colors.png" alt="emission line galaxy counts" style="width:256px; float: left; margin-right: 15px;"/> 
+<img src="./assets/img/colors.png" alt="galaxy color distribution" style="width:256px; float: left; margin-right: 15px;"/> 
 
 The distribution of galaxy colors from a synthetic survey built for the Legacy Survey of Space and Time on the [Rubin Observatory](https://www.lsst.org/) using the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) model. From [Korytov et al. (2019; ApJS; 245; 26)](https://ui.adsabs.harvard.edu/abs/2019ApJS..245...26K/abstract).
 <br>
