@@ -56,6 +56,8 @@ using a Monte Carlo radiative transfer code. From [Benson (2018, RNAAS, 2,
 
 Predictions for the number of \[O II\] emission line galaxies from the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) model compared with observational data. [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) is being used to build synthetic surveys of emission line galaxies for the [Roman Space Telescope](https://roman.gsfc.nasa.gov/). From [Zhai, AJB, et al. (2019; MNRAS; 490; 3667)](https://ui.adsabs.harvard.edu/abs/2019MNRAS.490.3667Z/abstract).
 <br>
+<br>
+<br>
 
 ### Synthetic Skies for the Legacy Survey of Space and Time on the Rubin Observatory
 
