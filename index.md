@@ -12,6 +12,8 @@ clusters.
 
 You can find a list of all of my publications [here](https://ui.adsabs.harvard.edu/user/libraries/YpLS0CLeQdSxHJbiIl1bQA).
 
+Contact me at [abenson@carnegiescience.edu](mailto:abenson@carnegiescience.edu).
+
 # Research
 
 You can learn more about current and former members of my research team [here](./team.html).
