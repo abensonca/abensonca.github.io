@@ -33,11 +33,25 @@ particle would produce gravitational lensing magnifications similar to those obs
 
 ### Suppresion of Dark Matter Halo Growth by Baryons
 
-<img src="./assets/img/power_spectrum.png" alt="gravitational quad lens" style="width:256px; float: right; margin-left: 15px;"/> 
+<img src="./assets/img/power_spectrum.png" alt="dark matter power spectrum" style="width:256px; float: right; margin-left: 15px;"/> 
 
 The power spectrum of matter in a universe containing both baryons and dark matter, relative to that in a pure dark matter
 universe.  These calculations are being used to quantify how baryons reduce the number of low mass dark matter halos that form - a
 crucial input to observational programs which aim to measure the nature of dark matter. From [Benson (2020, MNRAS, 493,
 1268)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.493.1268B/abstract).
 
+
+
+
+
+
 ## Galaxies
+
+### Dust Extinction Curves for Galaxies
+
+<img src="./assets/img/extinction_curves.png" alt="dust extinction curves" style="width:256px; float: left; margin-right: 15px;"/> 
+
+The extinction as a function of wavelength caused by dust in a suite of model galaxies. Understanding how dust absorbs starlight
+is an input ingredient in the construction of simulated surveys for future telescopes. The extinction curves shown were computed
+using a Monte Carlo radiative transfer code. From [Benson (2018, RNAAS, 2,
+188)](https://ui.adsabs.harvard.edu/abs/2018RNAAS...2..188B/abstract).
