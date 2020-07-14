@@ -29,6 +29,8 @@ particle would produce gravitational lensing magnifications similar to those obs
 
 
 
+
+
 ### Suppresion of Dark Matter Halo Growth by Baryons
 
 <img src="./assets/img/power_spectrum.png" alt="gravitational quad lens" style="width:256px; float: right; margin-left: 15px;"/> 
