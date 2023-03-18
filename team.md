@@ -10,7 +10,7 @@ description: Theoretical Astrophysicist at the Carnegie Observatories
 * [Shengqi Yang](https://sheayang.github.io/) - [CTAC](https://ctac.carnegiescience.edu/) Fellow (starting Fall 2021)
 * [Nicole Sanchez](https://nnicolesanchez.github.io/) - NSF MPS Ascend fellow
 * Paul Menker - Graduate student (USC)
-* Niusha Ahvazi - Graduate student (UCR - starting Fall 2021)
+* Niusha Ahvazi - Graduate student (UCR)
 * [Dimple Sarnaaik](https://www.linkedin.com/in/dimple-sarnaaik-30b503143) - Graduate student (USC)
 * Jack Lonergan - Graduate student (USC)
 * Juan Quiroz - Undergraduate student (Caltech)
