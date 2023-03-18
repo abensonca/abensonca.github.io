@@ -6,19 +6,23 @@ description: Theoretical Astrophysicist at the Carnegie Observatories
 
 # Research Group
 
-* [Xiaolong Du](https://xiaolong-du.github.io/) - Postdoctoral Fellow
-* [Fangzhou Jiang](https://www.fzjiang.com/) - Caltech-Carnegie Postdoctoral Fellow
 * [Ethan Nadler](https://kipac.stanford.edu/people/ethan-nadler) - [CTAC](https://ctac.carnegiescience.edu/) Fellow (starting Fall 2021)
 * [Shengqi Yang](https://sheayang.github.io/) - [CTAC](https://ctac.carnegiescience.edu/) Fellow (starting Fall 2021)
-* David Gonzalez-Dysinger - Graduate student (USC)
+* [Nicole Sanchez](https://nnicolesanchez.github.io/) - NSF MPS Ascend fellow
 * Paul Menker - Graduate student (USC)
 * Niusha Ahvazi - Graduate student (UCR - starting Fall 2021)
-* Madeline Overton - [CASSI](https://obs.carnegiescience.edu/CASSI) summer intern (SDSU - summer 2021)
-* Shalini Kurinchi-Vendhan - [CASSI](https://obs.carnegiescience.edu/CASSI)/[SURF](http://sfp.caltech.edu/programs/surf) summer intern (Caltech - summer 2021)
-
+* [Dimple Sarnaaik](https://www.linkedin.com/in/dimple-sarnaaik-30b503143) - Graduate student (USC)
+* Jack Lonergan - Graduate student (USC)
+* Juan Quiroz - Undergraduate student (Caltech)
 
 ## Alumni
 
+* [Xiaolong Du](https://xiaolong-du.github.io/) - Postdoctoral Scholar (UCLA)
+* [Fangzhou Jiang](https://www.fzjiang.com/) - Assistant Professor (KIAA)
+* David Gonzalez-Dysinger
+* Ellen Min
+* Madeline Overton - [CASSI](https://obs.carnegiescience.edu/CASSI) summer intern (SDSU - summer 2021)
+* Shalini Kurinchi-Vendhan - [CASSI](https://obs.carnegiescience.edu/CASSI)/[SURF](http://sfp.caltech.edu/programs/surf) summer intern (Caltech - summer 2021)
 * Turner Johnson - Undergraduate student (Haverford College)
 * Yu Lu - Lam Research
 * [Milan Roberson](https://www.linkedin.com/in/milan-roberson-705a5b160/) - Undergraduate student (Caltech)
