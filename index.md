@@ -20,6 +20,18 @@ You can learn more about current and former members of my research team [here](.
 
 ## Dark Matter
 
+### Building Constrained Merger Trees
+
+[Nadler, AJB, et al. (2023, MNRAS, 639)](https://ui.adsabs.harvard.edu/abs/2023MNRAS.tmp..639N)
+
+### Universal Gravothermal Solutions for SIDM Halos
+
+[Yang, AJB, et al. (2022, MNRAS in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220502957Y)
+
+### Tidal Tracks for Dark Matter Subhalos 
+
+[AJB & Du (2022, MNRAS, 517, 1398)](https://ui.adsabs.harvard.edu/abs/2022MNRAS.517.1398B)
+
 ### Constraining the Particle Mass of Warm Dark Matter
 
 <img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px; float: left; margin-right: 15px;"/> 
@@ -42,6 +54,10 @@ crucial input to observational programs which aim to measure the nature of dark 
 <br>
 
 ## Galaxies
+
+### Modeling the Milky Way's Dwarf Galaxies
+
+[Weerasooriya, AJB, et al. (2022, ApJ in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220913663W)
 
 ### Dust Extinction Curves for Galaxies
 
