@@ -6,8 +6,8 @@ description: Theoretical Astrophysicist at the Carnegie Observatories
 
 # Research Group
 
-* [Ethan Nadler](https://kipac.stanford.edu/people/ethan-nadler) - [CTAC](https://ctac.carnegiescience.edu/) Fellow (starting Fall 2021)
-* [Shengqi Yang](https://sheayang.github.io/) - [CTAC](https://ctac.carnegiescience.edu/) Fellow (starting Fall 2021)
+* [Ethan Nadler](https://kipac.stanford.edu/people/ethan-nadler) - [CTAC](https://ctac.carnegiescience.edu/) Fellow
+* [Shengqi Yang](https://sheayang.github.io/) - [CTAC](https://ctac.carnegiescience.edu/) Fellow
 * [Nicole Sanchez](https://nnicolesanchez.github.io/) - NSF MPS Ascend fellow
 * Paul Menker - Graduate student (USC)
 * Niusha Ahvazi - Graduate student (UCR)
