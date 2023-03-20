@@ -22,7 +22,7 @@ You can learn more about current and former members of my research team [here](.
 
 ### Building Constrained Merger Trees
 
-<img src="./assets/img/brownian_bridge.png" alt="Brownian bridge excursions" style="width:256px; float: left; margin-right: 15px;"/> 
+<img src="./assets/img/brownian_bridge.png" alt="Brownian bridge excursions" style="width:256px; float: right; margin-left: 15px;"/>
 
 Examples of "Brownian bridge excursions" realized using the methods developed by [Nadler, AJB, et al. (2023, MNRAS, 639)](https://ui.adsabs.harvard.edu/abs/2023MNRAS.tmp..639N). This stochastic process allows us to construct merger trees describing the assembly of dark matter halos which automatically satisfy certain constraints - such as a Milky Way halo that is guaranteed to always contain an LMC.
 <br>
@@ -30,11 +30,15 @@ Examples of "Brownian bridge excursions" realized using the methods developed by
 
 ### Universal Gravothermal Solutions for SIDM Halos
 
-[Yang, AJB, et al. (2022, MNRAS in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220502957Y)
+<img src="./assets/img/gravothermal.png" alt="gravothermal solutions" style="width:256px; float: left; margin-right: 15px;"/> 
+
+If dark matter particles can undergo elastic scattering from each other (so-called "self interacting dark matter", SIDM) then dark matter halos are subject to the gravothermal instability, resulting in a runaway process of core-collapse. In [Yang, AJB, et al. (2022, MNRAS in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220502957Y) we develop a universal saling solution for the gravothermal evolution of SIDM dark matter halos and demonstrate that it agrees well with numerical results while being many orders of magnitude faster - opening up the possibility of detailed studies of SIDM model parameter spaces.
 
 ### Tidal Tracks for Dark Matter Subhalos 
 
-[AJB & Du (2022, MNRAS, 517, 1398)](https://ui.adsabs.harvard.edu/abs/2022MNRAS.517.1398B)
+<img src="./assets/img/tidal_tracks.png" alt="tidal tracks" style="width:256px; float: right; margin-left: 15px;"/>
+
+Dark matter subhalos are modified by tidal forces as they orbit within the gravitational potential of their host halos. This has important consequences for their detectability as tidal heating changes their density profiles. It has long been know that the density evolution of subhalos follows a universal "tidal track". In [AJB & Du (2022, MNRAS, 517, 1398)](https://ui.adsabs.harvard.edu/abs/2022MNRAS.517.1398B) we develop a simple, semi-analytic model for this evolution and demonstrate that it can reproduce the results of high resolution N-body simulations with excellent accuracy.
 
 ### Constraining the Particle Mass of Warm Dark Matter
 
@@ -61,7 +65,9 @@ crucial input to observational programs which aim to measure the nature of dark 
 
 ### Modeling the Milky Way's Dwarf Galaxies
 
-[Weerasooriya, AJB, et al. (2022, ApJ in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220913663W)
+<img src="./assets/img/mass_metallicity.png" alt="mass-metallicity relation" style="width:256px; float: right; margin-left: 15px;"/>
+
+The mass-metallicity relation for Milky Way dwarf satellites as predicted by [Weerasooriya, AJB, et al. (2022, ApJ in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220913663W) using the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) model (meganta points). Results are compared to observations (green points) and found to be in good agreement. Modeling the mass-metallicity relation provides strong constraints on the nature of feedback and outflows in the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) galaxy formation model.
 
 ### Dust Extinction Curves for Galaxies
 
