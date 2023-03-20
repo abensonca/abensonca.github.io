@@ -22,7 +22,11 @@ You can learn more about current and former members of my research team [here](.
 
 ### Building Constrained Merger Trees
 
-[Nadler, AJB, et al. (2023, MNRAS, 639)](https://ui.adsabs.harvard.edu/abs/2023MNRAS.tmp..639N)
+<img src="./assets/img/brownian_bridge.png" alt="Brownian bridge excursions" style="width:256px; float: left; margin-right: 15px;"/> 
+
+Examples of "Brownian bridge excursions" realized using the methods developed by [Nadler, AJB, et al. (2023, MNRAS, 639)](https://ui.adsabs.harvard.edu/abs/2023MNRAS.tmp..639N). This stochastic process allows us to construct merger trees describing the assembly of dark matter halos which automatically satisfy certain constraints - such as a Milky Way halo that is guaranteed to always contain an LMC.
+<br>
+<br>
 
 ### Universal Gravothermal Solutions for SIDM Halos
 
