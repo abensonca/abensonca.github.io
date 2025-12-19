@@ -1,0 +1,1 @@
+![cicd](https://github.com/galacticusorg/galacticus/actions/workflows/cicd.yml/badge.svg)![links]([https://github.com/galacticusorg/galacticus/actions/workflows/cicd.yml/badge.svg](https://github.com/galacticusorg/galacticus/actions/workflows/linkCheck.yml/badge.svg))
