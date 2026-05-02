@@ -1,109 +1,125 @@
-# The Cayman theme
+# abensonca.github.io
 
-[![Build Status](https://travis-ci.org/pages-themes/cayman.svg?branch=master)](https://travis-ci.org/pages-themes/cayman) [![Gem Version](https://badge.fury.io/rb/jekyll-theme-cayman.svg)](https://badge.fury.io/rb/jekyll-theme-cayman)
+Source for [abensonca.github.io](https://abensonca.github.io) — Andrew Benson's
+research site. Built with Jekyll on GitHub Pages.
 
-*Cayman is a Jekyll theme for GitHub Pages. You can [preview the theme to see what it looks like](http://pages-themes.github.io/cayman), or even [use it today](#usage).*
+## Layout
 
-![Thumbnail of Cayman](thumbnail.png)
-
-## Usage
-
-To use the Cayman theme:
-
-1. Add the following to your site's `_config.yml`:
-
-    ```yml
-    theme: jekyll-theme-cayman
-    ```
-
-2. Optionally, if you'd like to preview your site on your computer, add the following to your site's `Gemfile`:
-
-    ```ruby
-    gem "github-pages", group: :jekyll_plugins
-    ```
-
-## Customizing
-
-### Configuration variables
-
-Cayman will respect the following variables, if set in your site's `_config.yml`:
-
-```yml
-title: [The title of your site]
-description: [A short description of your site's purpose]
+```
+.
+├── _config.yml             Site config + author metadata
+├── _data/
+│   ├── navigation.yml      Top-nav items
+│   ├── highlights.yml      Front-page research-area cards
+│   ├── members.yml         Group-member manifest (single source of truth)
+│   ├── code.yml            Software/projects on /code/
+│   ├── cv.yml              CV entries
+│   └── papers.yml          AUTO-GENERATED — recent ADS papers
+├── _layouts/               default / page / home
+├── _includes/              nav, footer, paper-card, member-card
+├── _sass/main.scss         Custom theme (no parent theme, light + dark mode)
+├── assets/
+│   ├── css/style.scss      Loads _sass/main.scss
+│   └── img/                Static figures + auto-generated paper figures
+├── scripts/
+│   ├── fetch_papers.py     ADS query → AI summary + figure → _data/papers.yml
+│   └── fetch_affiliations.py ORCID employments → members.yml
+└── .github/workflows/
+    ├── update-papers.yml         Weekly
+    └── update-affiliations.yml   Monthly
 ```
 
-Additionally, you may choose to set the following optional variables:
+## Updating content
 
-```yml
-show_downloads: ["true" or "false" to indicate whether to provide a download URL]
-google_analytics: [Your Google Analytics tracking ID]
+### Day to day
+
+| Want to change… | Edit |
+|---|---|
+| Hero bio, links, contact info | `_config.yml` (`author:`) and `index.md` (front matter `bio:`) |
+| Front-page research-area cards | `_data/highlights.yml` |
+| Long-form research descriptions | `research.md` |
+| Software / open-source projects | `_data/code.yml` |
+| CV entries (positions, education, awards) | `_data/cv.yml` |
+| Group members (current + alumni) | `_data/members.yml` |
+| Top-nav items | `_data/navigation.yml` |
+
+Recent papers and (where ORCID iDs are listed) alumni affiliations refresh
+themselves on a schedule — see below.
+
+### Adding a group member
+
+Append an entry to `_data/members.yml`:
+
+```yaml
+- name: Jane Doe
+  role: Graduate student (USC)
+  status: current             # or "alumni"
+  website: https://example.com
+  orcid: 0000-0000-0000-0000  # optional; enables auto-updated affiliations
 ```
 
-### Stylesheet
+Set `affiliation_locked: true` to prevent the scheduled job from overwriting
+that member's `current_affiliation`.
 
-If you'd like to add your own custom styles:
+## Automation
 
-1. Create a file called `/assets/css/style.scss` in your site
-2. Add the following content to the top of the file, exactly as shown:
-    ```scss
-    ---
-    ---
+### Recent-papers pipeline (`update-papers.yml`)
 
-    @import "{{ site.theme }}";
-    ```
-3. Add any custom CSS (or Sass, including imports) you'd like immediately after the `@import` line
+Runs weekly. For each selected paper from the configured ADS library it:
 
-*Note: If you'd like to change the theme's Sass variables, you must set new values before the `@import` line in your stylesheet.*
+1. Fetches metadata from NASA ADS.
+2. Downloads the arXiv PDF, renders the first ~12 pages.
+3. Asks a small vision-capable model on
+   [GitHub Models](https://docs.github.com/en/github-models) to pick the page
+   containing the most representative figure.
+4. Crops whitespace and saves the figure to `assets/img/papers/`.
+5. Asks the same model for a two-sentence plain-English summary.
+6. Writes the result to `_data/papers.yml` and commits it back to the repo.
 
-### Layouts
+If a paper already has a figure on disk and a summary in the data file, the
+expensive steps are skipped — so re-runs are cheap.
 
-If you'd like to change the theme's HTML layout:
+#### Required secret
 
-1. [Copy the original template](https://github.com/pages-themes/cayman/blob/master/_layouts/default.html) from the theme's repository<br />(*Pro-tip: click "raw" to make copying easier*)
-2. Create a file called `/_layouts/default.html` in your site
-3. Paste the default layout content copied in the first step
-4. Customize the layout as you'd like
+Create a repo secret named **`ADS_API_TOKEN`** with a NASA ADS API token
+([generate one here](https://ui.adsabs.harvard.edu/user/settings/token)). The
+default `GITHUB_TOKEN` is wired up for GitHub Models access via the
+`models: read` permission declared in the workflow.
 
-### Overriding GitHub-generated URLs
+#### Manual run
 
-Templates often rely on URLs supplied by GitHub such as links to your repository or links to download your project. If you'd like to override one or more default URLs:
+From the **Actions** tab, run *Update papers* with an optional `limit` input.
 
-1. Look at [the template source](https://github.com/pages-themes/cayman/blob/master/_layouts/default.html) to determine the name of the variable. It will be in the form of `{{ site.github.zip_url }}`.
-2. Specify the URL that you'd like the template to use in your site's `_config.yml`. For example, if the variable was `site.github.url`, you'd add the following:
-    ```yml
-    github:
-      zip_url: http://example.com/download.zip
-      another_url: another value
-    ```
-3. When your site is built, Jekyll will use the URL you specified, rather than the default one provided by GitHub.
+### Affiliations pipeline (`update-affiliations.yml`)
 
-*Note: You must remove the `site.` prefix, and each variable name (after the `github.`) should be indent with two space below `github:`.*
+Runs monthly. Calls the public ORCID API for every member that has an
+`orcid:` field set, finds their most recent employment, and updates
+`current_affiliation:` in `_data/members.yml`. Members without an ORCID iD,
+or with `affiliation_locked: true`, are left alone.
 
-For more information, see [the Jekyll variables documentation](https://jekyllrb.com/docs/variables/).
+> **Why not LinkedIn?** LinkedIn's terms of service prohibit scraping and they
+> aggressively block unauthenticated traffic. ORCID is the practical
+> alternative for academics — it has a public API and many alumni already have
+> profiles.
 
-## Roadmap
+## Running locally
 
-See the [open issues](https://github.com/pages-themes/cayman/issues) for a list of proposed features (and known issues).
+```bash
+bundle install
+bundle exec jekyll serve --livereload
+```
 
-## Project philosophy
+Then visit <http://127.0.0.1:4000/>.
 
-The Cayman theme is intended to make it quick and easy for GitHub Pages users to create their first (or 100th) website. The theme should meet the vast majority of users' needs out of the box, erring on the side of simplicity rather than flexibility, and provide users the opportunity to opt-in to additional complexity if they have specific needs or wish to further customize their experience (such as adding custom CSS or modifying the default layout). It should also look great, but that goes without saying.
+To preview the auto-generation pipelines locally:
 
-## Contributing
+```bash
+pip install -r scripts/requirements.txt
+ADS_API_TOKEN=… GITHUB_TOKEN=… python scripts/fetch_papers.py
+python scripts/fetch_affiliations.py --check    # dry run
+```
 
-Interested in contributing to Cayman? We'd love your help. Cayman is an open source project, built one contribution at a time by users like you. See [the CONTRIBUTING file](docs/CONTRIBUTING.md) for instructions on how to contribute.
+## License
 
-### Previewing the theme locally
-
-If you'd like to preview the theme locally (for example, in the process of proposing a change):
-
-1. Clone down the theme's repository (`git clone https://github.com/pages-themes/cayman`)
-2. `cd` into the theme's directory
-3. Run `script/bootstrap` to install the necessary dependencies
-4. Run `bundle exec jekyll serve` to start the preview server
-5. Visit [`localhost:4000`](http://localhost:4000) in your browser to preview the theme
-
-### Running tests
-
-The theme contains a minimal test suite, to ensure a site with the theme would build successfully. To run the tests, simply run `script/cibuild`. You'll need to run `script/bootstrap` once before the test script will work.
+Site content is © Andrew Benson. The bundled `_sass/normalize.scss` retains
+its original MIT license.

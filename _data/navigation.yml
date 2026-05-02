@@ -1,0 +1,11 @@
+# Top-nav items. Add or reorder as needed.
+- title: Research
+  url: /research/
+- title: Publications
+  url: /publications/
+- title: Code
+  url: /code/
+- title: Team
+  url: /team/
+- title: CV
+  url: /cv/

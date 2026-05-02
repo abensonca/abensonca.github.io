@@ -1,0 +1,458 @@
+#!/usr/bin/env python3
+"""
+Refresh _data/papers.yml from a NASA ADS library.
+
+Pipeline per paper:
+  1. Pull recent bibcodes from the ADS library, biased toward recent ones.
+  2. Fetch metadata (title, authors, year, venue, DOI, arXiv id).
+  3. Try to download the arXiv PDF; render its pages.
+  4. Ask a small vision-capable model on GitHub Models to pick the
+     single page with the most representative figure.
+  5. Crop that page (top/bottom whitespace) and save as a PNG.
+  6. Ask the same model for a short plain-English summary.
+  7. Write the result to _data/papers.yml so Jekyll can render cards.
+
+Required environment:
+  ADS_API_TOKEN     Personal NASA ADS token (https://ui.adsabs.harvard.edu/user/settings/token)
+  GITHUB_TOKEN      Token with `models:read` (workflows: github.token works)
+
+Optional:
+  ADS_LIBRARY_ID    Overrides _config.yml's ads_library_id.
+  PAPERS_LIMIT      How many papers to keep (default 6).
+  MODEL_NAME        GitHub Models model name (default openai/gpt-4o-mini).
+"""
+
+from __future__ import annotations
+
+import base64
+import io
+import json
+import os
+import pathlib
+import random
+import re
+import sys
+import time
+import urllib.parse
+from typing import Any
+
+import requests
+import yaml
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+DATA_FILE = ROOT / "_data" / "papers.yml"
+FIGURE_DIR = ROOT / "assets" / "img" / "papers"
+FIGURE_DIR.mkdir(parents=True, exist_ok=True)
+
+ADS_BASE = "https://api.adsabs.harvard.edu/v1"
+GH_MODELS_BASE = "https://models.github.ai/inference"
+
+PAPERS_LIMIT = int(os.environ.get("PAPERS_LIMIT", "6"))
+MODEL_NAME = os.environ.get("MODEL_NAME", "openai/gpt-4o-mini")
+
+# Recent-bias: how many of the most recent papers to pull from the library.
+ADS_FETCH_ROWS = 30
+
+
+def log(msg: str) -> None:
+    print(msg, flush=True)
+
+
+# --------------------------------------------------------------------------
+# ADS
+# --------------------------------------------------------------------------
+
+
+def _ads_session(token: str) -> requests.Session:
+    s = requests.Session()
+    s.headers.update({"Authorization": f"Bearer {token}"})
+    return s
+
+
+def fetch_library_bibcodes(session: requests.Session, library_id: str) -> list[str]:
+    """Return all bibcodes in the ADS library, ordered by ADS's default."""
+    url = f"{ADS_BASE}/biblib/libraries/{library_id}"
+    bibcodes: list[str] = []
+    start = 0
+    rows = 200
+    while True:
+        r = session.get(url, params={"start": start, "rows": rows}, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+        chunk = data.get("documents") or data.get("solr", {}).get("response", {}).get("docs") or []
+        if isinstance(chunk, list) and chunk and isinstance(chunk[0], dict):
+            chunk = [d.get("bibcode") for d in chunk]
+        bibcodes.extend(c for c in chunk if c)
+        meta = data.get("metadata", {})
+        total = meta.get("num_documents") or len(bibcodes)
+        start += rows
+        if start >= total:
+            break
+    return bibcodes
+
+
+def fetch_paper_metadata(session: requests.Session, bibcodes: list[str]) -> list[dict[str, Any]]:
+    """Look up canonical metadata for a list of bibcodes via ADS search."""
+    if not bibcodes:
+        return []
+    fl = ",".join([
+        "bibcode",
+        "title",
+        "author",
+        "year",
+        "pub",
+        "pubdate",
+        "doi",
+        "identifier",
+        "abstract",
+        "page",
+    ])
+    q = " OR ".join(f"bibcode:{b}" for b in bibcodes)
+    r = session.get(
+        f"{ADS_BASE}/search/query",
+        params={"q": q, "fl": fl, "rows": len(bibcodes), "sort": "date desc"},
+        timeout=30,
+    )
+    r.raise_for_status()
+    docs = r.json()["response"]["docs"]
+    by_bib = {d["bibcode"]: d for d in docs}
+    return [by_bib[b] for b in bibcodes if b in by_bib]
+
+
+def arxiv_id(doc: dict[str, Any]) -> str | None:
+    for ident in doc.get("identifier", []) or []:
+        m = re.match(r"^(?:arXiv:)?(\d{4}\.\d{4,5})", ident)
+        if m:
+            return m.group(1)
+    return None
+
+
+def short_authors(authors: list[str], focal: str = "Benson, A.") -> str:
+    if not authors:
+        return ""
+    if len(authors) == 1:
+        return authors[0]
+    head = authors[0]
+    if any(a.startswith("Benson") for a in authors):
+        if authors[0].startswith("Benson"):
+            return f"{head} et al." if len(authors) > 1 else head
+        return f"{head}, A. Benson, et al."
+    return f"{head} et al."
+
+
+def venue(doc: dict[str, Any]) -> str:
+    pub = doc.get("pub") or ""
+    return pub.replace("\\", "").strip()
+
+
+# --------------------------------------------------------------------------
+# Paper PDF + figures
+# --------------------------------------------------------------------------
+
+
+def download_arxiv_pdf(arxiv: str, dest: pathlib.Path) -> bool:
+    url = f"https://arxiv.org/pdf/{arxiv}.pdf"
+    try:
+        r = requests.get(url, timeout=60, headers={"User-Agent": "abensonca-site/1.0"})
+        r.raise_for_status()
+    except requests.RequestException as e:
+        log(f"  arXiv download failed for {arxiv}: {e}")
+        return False
+    dest.write_bytes(r.content)
+    return True
+
+
+def render_pdf_pages(pdf_path: pathlib.Path, max_pages: int = 12) -> list[bytes]:
+    """Render the first `max_pages` pages of a PDF to PNG bytes."""
+    import fitz  # PyMuPDF
+
+    out: list[bytes] = []
+    with fitz.open(pdf_path) as doc:
+        for i, page in enumerate(doc):
+            if i >= max_pages:
+                break
+            # 144 dpi gives a crisp thumbnail without huge payloads.
+            pm = page.get_pixmap(dpi=144, alpha=False)
+            out.append(pm.tobytes("png"))
+    return out
+
+
+def crop_whitespace(png_bytes: bytes) -> bytes:
+    """Trim large white margins from a page image so figure cards look clean."""
+    from PIL import Image, ImageChops
+
+    img = Image.open(io.BytesIO(png_bytes)).convert("RGB")
+    bg = Image.new(img.mode, img.size, (255, 255, 255))
+    diff = ImageChops.difference(img, bg)
+    bbox = diff.getbbox()
+    if bbox:
+        # Add a small padding.
+        pad = 12
+        left, upper, right, lower = bbox
+        left = max(0, left - pad)
+        upper = max(0, upper - pad)
+        right = min(img.width, right + pad)
+        lower = min(img.height, lower + pad)
+        img = img.crop((left, upper, right, lower))
+    # Cap the long edge so the asset stays small.
+    max_edge = 1000
+    if max(img.size) > max_edge:
+        scale = max_edge / max(img.size)
+        img = img.resize((int(img.width * scale), int(img.height * scale)))
+    out = io.BytesIO()
+    img.save(out, format="PNG", optimize=True)
+    return out.getvalue()
+
+
+# --------------------------------------------------------------------------
+# GitHub Models
+# --------------------------------------------------------------------------
+
+
+def _gh_models_session(token: str) -> requests.Session:
+    s = requests.Session()
+    s.headers.update({
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    })
+    return s
+
+
+def gh_models_chat(session: requests.Session, messages: list[dict[str, Any]],
+                   max_tokens: int = 600, retries: int = 3) -> str:
+    body = {
+        "model": MODEL_NAME,
+        "messages": messages,
+        "temperature": 0.2,
+        "max_tokens": max_tokens,
+    }
+    last_err: Exception | None = None
+    for attempt in range(retries):
+        try:
+            r = session.post(
+                f"{GH_MODELS_BASE}/chat/completions",
+                json=body,
+                timeout=90,
+            )
+            if r.status_code == 429:
+                # Free tier is rate-limited; back off.
+                wait = 10 * (attempt + 1)
+                log(f"  rate-limited; sleeping {wait}s")
+                time.sleep(wait)
+                continue
+            r.raise_for_status()
+            return r.json()["choices"][0]["message"]["content"].strip()
+        except requests.RequestException as e:
+            last_err = e
+            time.sleep(2 ** attempt)
+    raise RuntimeError(f"GitHub Models call failed after {retries} attempts: {last_err}")
+
+
+def pick_figure_page(session: requests.Session, page_pngs: list[bytes],
+                     title: str) -> int:
+    """Ask the vision model which page best represents the paper's lead figure."""
+    if not page_pngs:
+        return -1
+
+    # Build a multi-image content payload. Skip page 0 (typically text) but
+    # include it as a fallback option.
+    content: list[dict[str, Any]] = [{
+        "type": "text",
+        "text": (
+            f"Paper title: {title}\n"
+            "Below are thumbnails of pages from this paper, in order. "
+            "Pick the SINGLE page that contains the most visually compelling, "
+            "representative figure for use as a thumbnail on a research website. "
+            "Strongly prefer pages dominated by a plot, diagram, or image rather "
+            "than text. Reply with only an integer index (0-based)."
+        ),
+    }]
+    for png in page_pngs:
+        b64 = base64.b64encode(png).decode("ascii")
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": f"data:image/png;base64,{b64}"},
+        })
+
+    try:
+        reply = gh_models_chat(session, [{"role": "user", "content": content}], max_tokens=8)
+    except Exception as e:
+        log(f"  figure pick failed: {e}; falling back to page 1")
+        return 1 if len(page_pngs) > 1 else 0
+
+    m = re.search(r"\d+", reply)
+    if not m:
+        return 1 if len(page_pngs) > 1 else 0
+    idx = int(m.group(0))
+    if 0 <= idx < len(page_pngs):
+        return idx
+    return 1 if len(page_pngs) > 1 else 0
+
+
+def summarize_paper(session: requests.Session, title: str, abstract: str) -> str:
+    if not abstract:
+        return ""
+    prompt = (
+        "Summarize the following astrophysics paper abstract for a research-website "
+        "card. Two sentences max, plain English, focus on the result's significance. "
+        "No hype, no first person, no quotation marks.\n\n"
+        f"Title: {title}\n\nAbstract: {abstract}"
+    )
+    try:
+        return gh_models_chat(
+            session,
+            [{"role": "user", "content": prompt}],
+            max_tokens=200,
+        )
+    except Exception as e:
+        log(f"  summary failed: {e}")
+        return ""
+
+
+# --------------------------------------------------------------------------
+# Driver
+# --------------------------------------------------------------------------
+
+
+def site_config() -> dict[str, Any]:
+    cfg_path = ROOT / "_config.yml"
+    return yaml.safe_load(cfg_path.read_text()) or {}
+
+
+def load_existing() -> list[dict[str, Any]]:
+    if not DATA_FILE.exists():
+        return []
+    try:
+        data = yaml.safe_load(DATA_FILE.read_text()) or []
+        return data if isinstance(data, list) else []
+    except yaml.YAMLError:
+        return []
+
+
+def main() -> int:
+    ads_token = os.environ.get("ADS_API_TOKEN")
+    gh_token = os.environ.get("GITHUB_TOKEN")
+    if not ads_token:
+        log("ADS_API_TOKEN is not set; skipping paper update.")
+        return 0
+    if not gh_token:
+        log("GITHUB_TOKEN is not set; will fetch metadata but skip summaries/figures.")
+
+    cfg = site_config()
+    library_id = os.environ.get("ADS_LIBRARY_ID") or cfg.get("ads_library_id")
+    if not library_id:
+        log("No ADS library id configured (`ads_library_id` in _config.yml).")
+        return 1
+
+    ads = _ads_session(ads_token)
+    gh = _gh_models_session(gh_token) if gh_token else None
+
+    log(f"Fetching library {library_id}…")
+    bibcodes = fetch_library_bibcodes(ads, library_id)
+    if not bibcodes:
+        log("Library returned no bibcodes; aborting.")
+        return 1
+    log(f"  → {len(bibcodes)} bibcodes total")
+
+    # Pull fresh metadata for the most recent N entries (ADS sorts library by
+    # add-date by default; we re-sort by date desc on the metadata side).
+    head = bibcodes[: ADS_FETCH_ROWS]
+    docs = fetch_paper_metadata(ads, head)
+
+    # Recent-bias: weight by year so newer papers are likelier to land in
+    # the front-page sample, but allow a few older highlights through.
+    def weight(d: dict[str, Any]) -> float:
+        try:
+            y = int(d.get("year") or 0)
+        except (TypeError, ValueError):
+            y = 0
+        return max(1.0, y - 2010) ** 1.4
+
+    docs_sorted = sorted(docs, key=lambda d: int(d.get("year") or 0), reverse=True)
+    pool = docs_sorted[: max(PAPERS_LIMIT * 2, PAPERS_LIMIT)]
+    weights = [weight(d) for d in pool]
+    chosen: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    rng = random.Random(42)
+    for cand in pool[:PAPERS_LIMIT]:
+        chosen.append(cand)
+        seen.add(cand["bibcode"])
+    if len(chosen) < PAPERS_LIMIT:
+        # Sample additional unique entries weighted by recency.
+        for _ in range(PAPERS_LIMIT * 5):
+            if len(chosen) >= PAPERS_LIMIT:
+                break
+            cand = rng.choices(pool, weights=weights, k=1)[0]
+            if cand["bibcode"] in seen:
+                continue
+            chosen.append(cand)
+            seen.add(cand["bibcode"])
+
+    existing = {p.get("bibcode"): p for p in load_existing()}
+    out: list[dict[str, Any]] = []
+
+    for doc in chosen:
+        bib = doc["bibcode"]
+        title = (doc.get("title") or [""])[0]
+        log(f"\nProcessing {bib}: {title[:80]}")
+
+        prev = existing.get(bib, {})
+        figure_path = prev.get("figure")
+        summary = prev.get("summary", "")
+
+        ax = arxiv_id(doc)
+        url = f"https://ui.adsabs.harvard.edu/abs/{urllib.parse.quote(bib)}"
+
+        # Figure: only re-run if we don't already have one.
+        if gh and not (figure_path and (ROOT / figure_path.lstrip("/")).exists()) and ax:
+            pdf_path = FIGURE_DIR / f"{bib.replace('/', '_')}.pdf"
+            if download_arxiv_pdf(ax, pdf_path):
+                try:
+                    pages = render_pdf_pages(pdf_path)
+                except Exception as e:
+                    log(f"  PDF render failed: {e}")
+                    pages = []
+                if pages:
+                    idx = pick_figure_page(gh, pages, title)
+                    log(f"  picked page {idx}")
+                    try:
+                        cropped = crop_whitespace(pages[idx])
+                    except Exception:
+                        cropped = pages[idx]
+                    img_path = FIGURE_DIR / f"{bib.replace('/', '_')}.png"
+                    img_path.write_bytes(cropped)
+                    figure_path = "/" + img_path.relative_to(ROOT).as_posix()
+                pdf_path.unlink(missing_ok=True)
+
+        # Summary: only re-run if we don't already have one.
+        abstract = doc.get("abstract") or ""
+        if gh and not summary and abstract:
+            summary = summarize_paper(gh, title, abstract)
+
+        out.append({
+            "bibcode": bib,
+            "title": title,
+            "authors_short": short_authors(doc.get("author") or []),
+            "year": int(doc.get("year") or 0) or None,
+            "venue": venue(doc),
+            "url": url,
+            "arxiv": f"https://arxiv.org/abs/{ax}" if ax else None,
+            "doi": (doc.get("doi") or [None])[0],
+            "summary": summary,
+            "figure": figure_path,
+        })
+
+    # Stable order: most recent first.
+    out.sort(key=lambda p: p.get("year") or 0, reverse=True)
+
+    DATA_FILE.write_text(
+        "# Auto-generated by scripts/fetch_papers.py — do not edit by hand.\n"
+        + yaml.safe_dump(out, sort_keys=False, allow_unicode=True, width=100)
+    )
+    log(f"\nWrote {DATA_FILE.relative_to(ROOT)} with {len(out)} entries.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,25 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-block">
+      <p class="footer-name">{{ site.title }}</p>
+      <p class="footer-affiliation">
+        <a href="https://obs.carnegiescience.edu/">Carnegie Observatories</a><br>
+        <a href="https://carnegiescience.edu/">Carnegie Institution for Science</a>
+      </p>
+    </div>
+    <div class="footer-block">
+      <p class="footer-heading">Contact</p>
+      <ul class="footer-links">
+        {% if site.author.email %}<li><a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a></li>{% endif %}
+        {% if site.author.github %}<li><a href="https://github.com/{{ site.author.github }}">GitHub</a></li>{% endif %}
+        {% if site.author.orcid %}<li><a href="https://orcid.org/{{ site.author.orcid }}">ORCID</a></li>{% endif %}
+        {% if site.author.ads %}<li><a href="{{ site.author.ads }}">NASA ADS</a></li>{% endif %}
+        {% if site.author.arxiv %}<li><a href="{{ site.author.arxiv }}">arXiv</a></li>{% endif %}
+      </ul>
+    </div>
+    <div class="footer-block footer-meta">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ site.title }}.</p>
+      <p>Built with Jekyll on GitHub Pages. Source on <a href="{{ site.github.repository_url }}">GitHub</a>.</p>
+    </div>
+  </div>
+</footer>

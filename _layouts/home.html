@@ -1,0 +1,27 @@
+---
+layout: default
+---
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow">{{ site.description }}</p>
+      <h1 class="hero-name">{{ site.title }}</h1>
+      <p class="hero-bio">{{ page.bio }}</p>
+      <div class="hero-links">
+        {% if site.author.email %}<a class="btn" href="mailto:{{ site.author.email }}">Email</a>{% endif %}
+        {% if site.author.ads %}<a class="btn btn-secondary" href="{{ site.author.ads }}">ADS Library</a>{% endif %}
+        {% if site.author.github %}<a class="btn btn-secondary" href="https://github.com/{{ site.author.github }}">GitHub</a>{% endif %}
+        {% if site.author.orcid %}<a class="btn btn-secondary" href="https://orcid.org/{{ site.author.orcid }}">ORCID</a>{% endif %}
+      </div>
+    </div>
+    {% if site.author.photo %}
+    <div class="hero-photo">
+      <img src="{{ site.author.photo | relative_url }}" alt="{{ site.title }}">
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<div class="page-wrap">
+  {{ content }}
+</div>

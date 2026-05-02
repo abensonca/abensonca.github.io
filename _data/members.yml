@@ -1,0 +1,157 @@
+# Research-group manifest. Edit this file to add or move members.
+#
+# Each member entry supports:
+#   name                  : (required)
+#   role                  : (required) e.g. "CTAC Fellow", "Graduate student (USC)"
+#   status                : "current" or "alumni" (required)
+#   website               : personal site URL
+#   linkedin              : LinkedIn profile URL (used as a display link only)
+#   github                : GitHub username
+#   orcid                 : ORCID iD (no URL prefix). If set, the scheduled
+#                           ORCID workflow will fill in current_affiliation.
+#   current_affiliation   : Auto-managed for ORCID-equipped alumni. You may also
+#                           edit by hand for those without ORCIDs.
+#   affiliation_locked    : true to prevent the scheduled job from overwriting
+#                           current_affiliation (e.g. if you want a custom value).
+
+- name: Ethan Nadler
+  role: CTAC Fellow
+  status: current
+  website: https://kipac.stanford.edu/people/ethan-nadler
+
+- name: Shengqi Yang
+  role: CTAC Fellow
+  status: current
+  website: https://sheayang.github.io/
+
+- name: Nicole Sanchez
+  role: NSF MPS Ascend Fellow
+  status: current
+  website: https://nnicolesanchez.github.io/
+
+- name: Paul Menker
+  role: Graduate student (USC)
+  status: current
+
+- name: Niusha Ahvazi
+  role: Graduate student (UCR)
+  status: current
+
+- name: Dimple Sarnaaik
+  role: Graduate student (USC)
+  status: current
+  linkedin: https://www.linkedin.com/in/dimple-sarnaaik-30b503143
+
+- name: Jack Lonergan
+  role: Graduate student (USC)
+  status: current
+
+- name: Juan Quiroz
+  role: Undergraduate student (Caltech)
+  status: current
+
+# ----- Alumni -----------------------------------------------------------
+
+- name: Xiaolong Du
+  role: Postdoctoral scholar
+  status: alumni
+  website: https://xiaolong-du.github.io/
+  current_affiliation: UCLA
+
+- name: Fangzhou Jiang
+  role: Postdoctoral scholar
+  status: alumni
+  website: https://www.fzjiang.com/
+  current_affiliation: Assistant Professor, KIAA
+
+- name: David Gonzalez-Dysinger
+  status: alumni
+
+- name: Ellen Min
+  status: alumni
+
+- name: Madeline Overton
+  role: CASSI summer intern (SDSU, summer 2021)
+  status: alumni
+
+- name: Shalini Kurinchi-Vendhan
+  role: CASSI/SURF summer intern (Caltech, summer 2021)
+  status: alumni
+
+- name: Turner Johnson
+  role: Undergraduate student (Haverford College)
+  status: alumni
+
+- name: Yu Lu
+  status: alumni
+  current_affiliation: Lam Research
+
+- name: Milan Roberson
+  role: Undergraduate student (Caltech)
+  status: alumni
+  linkedin: https://www.linkedin.com/in/milan-roberson-705a5b160/
+
+- name: Zoey Flynn
+  status: alumni
+
+- name: Daniel McAndrew
+  status: alumni
+  linkedin: https://www.linkedin.com/in/daniel-estevan-mcandrew/
+  current_affiliation: Machine Learning Engineer, Akamai Technologies
+
+- name: Gabe Currier
+  status: alumni
+
+- name: Andrea Kulier
+  role: Postdoctoral researcher
+  status: alumni
+  website: http://www.astro-udec.cl/rdemarco/GaTOS/members.html
+  current_affiliation: Catholic University of Chile
+
+- name: Daniel Grin
+  status: alumni
+  website: https://www.haverford.edu/users/dgrin
+  current_affiliation: Assistant Professor of Physics & Astronomy, Haverford College
+
+- name: Laura Book
+  status: alumni
+  linkedin: https://www.linkedin.com/in/booklaura/
+  current_affiliation: Senior Software Engineer, Google
+
+- name: Arya Farahi
+  status: alumni
+  website: https://afarahi.github.io/
+  current_affiliation: University of Michigan
+
+- name: Stéphane Mangeon
+  status: alumni
+  linkedin: https://www.linkedin.com/in/smangeon/
+  current_affiliation: Spatial & Temporal Data Science, Data61
+
+- name: Michael Maseda
+  status: alumni
+  website: https://home.strw.leidenuniv.nl/~maseda/
+  current_affiliation: NOVA Fellow, Leiden Observatory
+
+- name: Martin Stringer
+  status: alumni
+  website: https://researchers.uq.edu.au/researcher/14653
+  current_affiliation: Research Fellow, University of Queensland
+
+- name: Marios Kampakoglou
+  status: alumni
+  linkedin: https://www.linkedin.com/in/marios-kampakoglou-23793466/
+  current_affiliation: Chief Disruptor in Data Analytics, National Bank of Greece
+
+- name: Lauren Bose
+  status: alumni
+  linkedin: https://www.linkedin.com/in/lauren-bose-53b47031/
+  current_affiliation: Data Science Manager, Twitter
+
+- name: Tom Fox
+  status: alumni
+
+- name: Fernando Torres
+  status: alumni
+  linkedin: https://www.linkedin.com/in/fernandotorresmd/
+  current_affiliation: Radiologist, Kaiser Permanente

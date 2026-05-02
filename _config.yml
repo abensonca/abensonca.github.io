@@ -1,5 +1,43 @@
 title: Andrew Benson
-description: Theoretical Astrophysicist at the Carnegie Observatories
+description: Theoretical Astrophysicist · Carnegie Observatories
+url: https://abensonca.github.io
+repository: abensonca/abensonca.github.io
+lang: en-US
+
+author:
+  name: Andrew Benson
+  email: abenson@carnegiescience.edu
+  github: abensonca
+  orcid: 0000-0001-5501-6008
+  ads: https://ui.adsabs.harvard.edu/user/libraries/YpLS0CLeQdSxHJbiIl1bQA
+  arxiv: https://arxiv.org/a/benson_a_1
+  photo: /assets/img/profile.jpg
+
+# NASA ADS library used by the scheduled paper-fetcher.
+# Override either of these via repo variables / workflow inputs if you want.
+ads_library_id: YpLS0CLeQdSxHJbiIl1bQA
+
 show_downloads: false
 google_analytics:
-theme: jekyll-theme-cayman
+
+# Plugins (subset of github-pages whitelist).
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Don't ship dev/CI/source files in the built site.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - jekyll-theme-cayman.gemspec
+  - script
+  - docs
+  - scripts
+  - .github
+  - .rubocop.yml
+  - .travis.yml
+  - vendor
+  - thumbnail.png
+  - README.md
+  - LICENSE

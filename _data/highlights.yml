@@ -1,0 +1,21 @@
+# Front-page research-area cards. Edit freely; the homepage iterates this list.
+- eyebrow: Galaxy formation
+  title: The Galacticus model
+  description: An open-source semi-analytic model of galaxy formation used to interpret
+    observations across cosmic time.
+  image: /assets/img/colors.png
+  url: /research/#galacticus
+
+- eyebrow: Dark matter
+  title: Constraining dark matter microphysics
+  description: Using halo substructure, gravitational lensing, and dwarf galaxies to
+    test warm, self-interacting, and other non-CDM models.
+  image: /assets/img/lensing.png
+  url: /research/#dark-matter
+
+- eyebrow: Surveys
+  title: Synthetic skies for next-gen surveys
+  description: Building galaxy mocks for the Roman GRS Project Infrastructure Team and
+    the NASA Open Universe initiative.
+  image: /assets/img/elgCounts.png
+  url: /research/#surveys

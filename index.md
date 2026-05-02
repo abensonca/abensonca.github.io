@@ -1,99 +1,73 @@
 ---
-layout: default
+layout: home
+title: Andrew Benson
+description: Theoretical Astrophysicist · Carnegie Observatories
+permalink: /
+bio: I am a Staff Scientist at the Carnegie Observatories. My research is focused on
+  understanding the nature of dark matter and the process of galaxy formation —
+  combining analytic models, numerical simulations, and large astronomical surveys.
 ---
 
-I am a Staff Scientist at the [Observatories](https://obs.carnegiescience.edu/) of the [Carnegie Institution for
-Science](https://carnegiescience.edu/). My research program is focused on understanding the nature of dark matter and the process
-of galaxy formation, with a particular emphasis on formulating a coherent picture of the many different aspects of these
-problems. I have developed a model of dark matter and galaxy formation physics,
-[_Galacticus_](https://github.com/galacticusorg/galacticus/wiki), which is available to the community as an open source
-project. The approach blends both analytic understanding and significant number-crunching utilizing in-house and external compute
-clusters.
+<section class="section">
+  <p class="section-eyebrow">Research focus</p>
+  <h2 class="section-title">What I work on</h2>
+  <p class="section-lead">
+    Three threads tie my research together: building a coherent theoretical model
+    of galaxy formation; constraining the microphysics of dark matter; and
+    designing the synthetic universes that next-generation surveys need to
+    interpret their data.
+  </p>
 
-You can find a list of all of my publications [here](https://ui.adsabs.harvard.edu/user/libraries/YpLS0CLeQdSxHJbiIl1bQA).
+  <div class="highlight-grid">
+    {% for h in site.data.highlights %}
+      <a class="highlight-card" href="{{ h.url | relative_url }}">
+        {% if h.image %}<img class="card-image" src="{{ h.image | relative_url }}" alt="{{ h.title | escape }}">{% endif %}
+        <div class="card-body">
+          <p class="card-eyebrow">{{ h.eyebrow }}</p>
+          <h3>{{ h.title }}</h3>
+          <p>{{ h.description }}</p>
+          <span class="card-link">Read more &rarr;</span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
 
-Contact me at [abenson@carnegiescience.edu](mailto:abenson@carnegiescience.edu).
+<section class="section">
+  <p class="section-eyebrow">Recent work</p>
+  <h2 class="section-title">Selected recent papers</h2>
+  <p class="section-lead">
+    These cards are rebuilt automatically from
+    <a href="{{ site.author.ads }}">my NASA&nbsp;ADS library</a>
+    on a weekly schedule. Summaries and figures are generated from the paper itself.
+  </p>
 
-# Research
+  {% assign papers = site.data.papers | default: empty %}
+  {% if papers and papers.size > 0 %}
+    <div class="papers-grid">
+      {% for paper in papers limit: 6 %}
+        {% include paper-card.html paper=paper %}
+      {% endfor %}
+    </div>
+    <p style="margin-top:1.5rem"><a href="{{ '/publications/' | relative_url }}">See all recent papers &rarr;</a></p>
+  {% else %}
+    <div class="callout">
+      The scheduled fetcher hasn't populated <code>_data/papers.yml</code> yet.
+      It will run automatically once the workflow has access to <code>ADS_API_TOKEN</code>.
+      Until then, see the full list at <a href="{{ site.author.ads }}">NASA&nbsp;ADS</a>.
+    </div>
+  {% endif %}
+</section>
 
-You can learn more about current and former members of my research team [here](./team.html).
-
-## Dark Matter
-
-### Building Constrained Merger Trees
-
-<img src="./assets/img/brownian_bridge.png" alt="Brownian bridge excursions" style="width:256px; float: right; margin-left: 15px;"/>
-
-Examples of "Brownian bridge excursions" realized using the methods developed by [Nadler, AJB, et al. (2023, MNRAS, 639)](https://ui.adsabs.harvard.edu/abs/2023MNRAS.tmp..639N). This stochastic process allows us to construct merger trees describing the assembly of dark matter halos which automatically satisfy certain constraints - such as a Milky Way halo that is guaranteed to always contain an LMC.
-<br>
-<br>
-
-### Universal Gravothermal Solutions for SIDM Halos
-
-<img src="./assets/img/gravothermal.png" alt="gravothermal solutions" style="width:256px; float: left; margin-right: 15px;"/> 
-
-If dark matter particles can undergo elastic scattering from each other (so-called "self interacting dark matter", SIDM) then dark matter halos are subject to the gravothermal instability, resulting in a runaway process of core-collapse. In [Yang, AJB, et al. (2022, MNRAS in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220502957Y) we develop a universal saling solution for the gravothermal evolution of SIDM dark matter halos and demonstrate that it agrees well with numerical results while being many orders of magnitude faster - opening up the possibility of detailed studies of SIDM model parameter spaces.
-
-### Tidal Tracks for Dark Matter Subhalos 
-
-<img src="./assets/img/tidal_tracks.png" alt="tidal tracks" style="width:256px; float: right; margin-left: 15px;"/>
-
-Dark matter subhalos are modified by tidal forces as they orbit within the gravitational potential of their host halos. This has important consequences for their detectability as tidal heating changes their density profiles. It has long been know that the density evolution of subhalos follows a universal "tidal track". In [AJB & Du (2022, MNRAS, 517, 1398)](https://ui.adsabs.harvard.edu/abs/2022MNRAS.517.1398B) we develop a simple, semi-analytic model for this evolution and demonstrate that it can reproduce the results of high resolution N-body simulations with excellent accuracy.
-
-### Constraining the Particle Mass of Warm Dark Matter
-
-<img src="./assets/img/lensing.png" alt="gravitational quad lens" style="width:256px; float: left; margin-right: 15px;"/> 
-
-A model realization of the gravitational lensing convergence field around the observed gravitational quad-lens system WFI
-2033-4723. Tens of millions of such realizations were generated to quantify how frequently different masses of warm dark matter
-particle would produce gravitational lensing magnifications similar to those observed. From [Gilman, AJB, et al. (2020, MNRAS,
-491, 6077)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.491.6077G/abstract).
-<br>
-<br>
-
-### Suppresion of Dark Matter Halo Growth by Baryons
-
-<img src="./assets/img/power_spectrum.png" alt="dark matter power spectrum" style="width:256px; float: right; margin-left: 15px;"/> 
-
-The power spectrum of matter in a universe containing both baryons and dark matter, relative to that in a pure dark matter
-universe.  These calculations are being used to quantify how baryons reduce the number of low mass dark matter halos that form - a
-crucial input to observational programs which aim to measure the nature of dark matter. From [Benson (2020, MNRAS, 493,
-1268)](https://ui.adsabs.harvard.edu/abs/2020MNRAS.493.1268B/abstract).
-<br>
-
-## Galaxies
-
-### Modeling the Milky Way's Dwarf Galaxies
-
-<img src="./assets/img/mass_metallicity.png" alt="mass-metallicity relation" style="width:256px; float: right; margin-left: 15px;"/>
-
-The mass-metallicity relation for Milky Way dwarf satellites as predicted by [Weerasooriya, AJB, et al. (2022, ApJ in press)](https://ui.adsabs.harvard.edu/abs/2022arXiv220913663W) using the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) model (meganta points). Results are compared to observations (green points) and found to be in good agreement. Modeling the mass-metallicity relation provides strong constraints on the nature of feedback and outflows in the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) galaxy formation model.
-
-### Dust Extinction Curves for Galaxies
-
-<img src="./assets/img/extinction_curves.png" alt="dust extinction curves" style="width:256px; float: left; margin-right: 15px;"/> 
-
-The extinction as a function of wavelength caused by dust in a suite of model galaxies. Understanding how dust absorbs starlight
-is an input ingredient in the construction of simulated surveys for future telescopes. The extinction curves shown were computed
-using a Monte Carlo radiative transfer code. From [Benson (2018, RNAAS, 2,
-188)](https://ui.adsabs.harvard.edu/abs/2018RNAAS...2..188B/abstract).
-<br>
-
-### Emission Line Galaxy Survey Predictions for the Roman Space Telescope
-
-<img src="./assets/img/elgCounts.png" alt="emission line galaxy counts" style="width:256px; float: right; margin-left: 15px;"/> 
-
-Predictions for the number of \[O II\] emission line galaxies from the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) model compared with observational data. [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) is being used to build synthetic surveys of emission line galaxies for the [Roman Space Telescope](https://roman.gsfc.nasa.gov/). From [Zhai, AJB, et al. (2019; MNRAS; 490; 3667)](https://ui.adsabs.harvard.edu/abs/2019MNRAS.490.3667Z/abstract).
-<br>
-<br>
-<br>
-
-### Synthetic Skies for the Legacy Survey of Space and Time on the Rubin Observatory
-
-<img src="./assets/img/colors.png" alt="galaxy color distribution" style="width:256px; float: left; margin-right: 15px;"/> 
-
-The distribution of galaxy colors from a synthetic survey built for the Legacy Survey of Space and Time on the [Rubin Observatory](https://www.lsst.org/) using the [_Galacticus_](https://github.com/galacticusorg/galacticus/wiki) model. From [Korytov et al. (2019; ApJS; 245; 26)](https://ui.adsabs.harvard.edu/abs/2019ApJS..245...26K/abstract).
-<br>
-<br>
-<br>
-
+<section class="section">
+  <p class="section-eyebrow">Open source</p>
+  <h2 class="section-title">Galacticus</h2>
+  <p class="section-lead">
+    Most of my modeling work happens inside
+    <a href="https://github.com/galacticusorg/galacticus/wiki"><em>Galacticus</em></a>,
+    an open-source semi-analytic model of galaxy formation that I wrote and
+    continue to develop. It's used by groups around the world to study dark matter,
+    galaxy evolution, and forecast observations for upcoming surveys.
+    <a href="{{ '/code/' | relative_url }}">See the full software stack &rarr;</a>
+  </p>
+</section>

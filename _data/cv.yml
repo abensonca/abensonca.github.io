@@ -1,0 +1,44 @@
+# Edit this file to keep the CV page up to date.
+# Each section is a list of {date, title, detail} entries; everything is
+# rendered automatically by /cv.md.
+
+current:
+  position: Staff Scientist
+  affiliation: The Observatories of the Carnegie Institution for Science
+
+positions:
+  - date: 2014 – present
+    title: Staff Scientist
+    detail: The Observatories of the Carnegie Institution for Science, Pasadena, CA
+  - date: 2012 – 2014
+    title: Moore Center for Theoretical Cosmology and Physics, postdoctoral scholar
+    detail: California Institute of Technology
+  # Add earlier positions here.
+
+education:
+  - date: PhD
+    title: Astronomy
+    detail: University of Cambridge
+  # Add earlier degrees here.
+
+awards:
+  # Example entry — replace with real awards.
+  # - date: 2023
+  #   title: Some Award
+  #   detail: Awarding organization
+
+service:
+  - date: ongoing
+    title: Roman GRS Project Infrastructure Team
+    detail: Member; modeling lead for emission-line galaxy synthetic surveys
+  - date: ongoing
+    title: NASA Open Universe initiative
+    detail: Galaxy formation modeling contributor
+  - date: ongoing
+    title: Galacticus
+    detail: Lead developer of the open-source galaxy-formation code
+
+links:
+  ads: https://ui.adsabs.harvard.edu/user/libraries/YpLS0CLeQdSxHJbiIl1bQA
+  orcid: https://orcid.org/0000-0001-5501-6008
+  arxiv: https://arxiv.org/a/benson_a_1

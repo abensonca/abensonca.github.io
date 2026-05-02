@@ -1,0 +1,23 @@
+<article class="paper-card">
+  {% if include.paper.figure %}
+    <a class="paper-figure" href="{{ include.paper.url }}" aria-label="Read paper on ADS">
+      <img src="{{ include.paper.figure | relative_url }}" alt="Figure from {{ include.paper.title | escape }}" loading="lazy">
+    </a>
+  {% endif %}
+  <div class="paper-body">
+    <p class="paper-meta">
+      <span class="paper-venue">{{ include.paper.venue }}</span>
+      {% if include.paper.year %}<span class="paper-year">{{ include.paper.year }}</span>{% endif %}
+    </p>
+    <h3 class="paper-title">
+      <a href="{{ include.paper.url }}">{{ include.paper.title }}</a>
+    </h3>
+    {% if include.paper.authors_short %}<p class="paper-authors">{{ include.paper.authors_short }}</p>{% endif %}
+    {% if include.paper.summary %}<p class="paper-summary">{{ include.paper.summary }}</p>{% endif %}
+    <p class="paper-links">
+      {% if include.paper.url %}<a href="{{ include.paper.url }}">ADS</a>{% endif %}
+      {% if include.paper.arxiv %} &middot; <a href="{{ include.paper.arxiv }}">arXiv</a>{% endif %}
+      {% if include.paper.doi %} &middot; <a href="https://doi.org/{{ include.paper.doi }}">DOI</a>{% endif %}
+    </p>
+  </div>
+</article>

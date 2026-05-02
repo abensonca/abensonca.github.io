@@ -1,0 +1,18 @@
+<article class="member-card">
+  <div class="member-body">
+    <h3 class="member-name">
+      {% if include.member.link %}<a href="{{ include.member.link }}">{{ include.member.name }}</a>
+      {% else %}{{ include.member.name }}{% endif %}
+    </h3>
+    <p class="member-role">{{ include.member.role }}</p>
+    {% if include.member.current_affiliation %}
+      <p class="member-current">Now: {{ include.member.current_affiliation }}</p>
+    {% endif %}
+    <ul class="member-links">
+      {% if include.member.website %}<li><a href="{{ include.member.website }}">Website</a></li>{% endif %}
+      {% if include.member.orcid %}<li><a href="https://orcid.org/{{ include.member.orcid }}">ORCID</a></li>{% endif %}
+      {% if include.member.linkedin %}<li><a href="{{ include.member.linkedin }}">LinkedIn</a></li>{% endif %}
+      {% if include.member.github %}<li><a href="https://github.com/{{ include.member.github }}">GitHub</a></li>{% endif %}
+    </ul>
+  </div>
+</article>
