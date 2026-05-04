@@ -198,15 +198,172 @@ def render_pdf_pages(pdf_path: pathlib.Path,
     return out
 
 
-def render_pdf_page_hires(pdf_path: pathlib.Path, index: int, dpi: int = 160) -> bytes | None:
-    """Re-render a specific page at higher DPI for use as the card image."""
+def render_pdf_page_hires(pdf_path: pathlib.Path, index: int, dpi: int = 160,
+                          clip: tuple[float, float, float, float] | None = None) -> bytes | None:
+    """Re-render a specific page (or sub-rectangle of one) at high DPI."""
     import fitz
 
     with fitz.open(pdf_path) as doc:
         if not (0 <= index < len(doc)):
             return None
-        pm = doc[index].get_pixmap(dpi=dpi, alpha=False)
+        page = doc[index]
+        kwargs: dict[str, Any] = {"dpi": dpi, "alpha": False}
+        if clip is not None:
+            kwargs["clip"] = fitz.Rect(*clip)
+        pm = page.get_pixmap(**kwargs)
         return pm.tobytes("png")
+
+
+def figure_bbox_in_page(pdf_path: pathlib.Path, page_idx: int) -> tuple[float, float, float, float] | None:
+    """
+    Compute a tight PDF-coord bounding box around the dominant figure on a
+    page using PyMuPDF's image+drawing primitives, with no model calls.
+
+    Most astrophysics figures are either embedded raster images or large
+    clusters of vector drawing operations (axes, ticks, lines, scatter
+    points). Page furniture — citation underlines, table rules, headers —
+    is filtered out by area and by overlap with text blocks. Returns None
+    if the page doesn't have a clearly dominant graphical region; the
+    caller should then fall back to the full-page render.
+    """
+    import fitz
+
+    with fitz.open(pdf_path) as doc:
+        if not (0 <= page_idx < len(doc)):
+            return None
+        page = doc[page_idx]
+        pw, ph = page.rect.width, page.rect.height
+        page_area = pw * ph
+        if page_area <= 0:
+            return None
+
+        rects: list[fitz.Rect] = []
+
+        # Embedded raster images.
+        for info in page.get_images(full=True):
+            try:
+                bbox = page.get_image_bbox(info)
+            except Exception:
+                continue
+            r = fitz.Rect(bbox)
+            if r.width > 0 and r.height > 0:
+                rects.append(r)
+
+        # Vector drawings (paths, fills, strokes — i.e. the bones of a plot).
+        try:
+            drawings = page.get_drawings()
+        except Exception:
+            drawings = []
+        for d in drawings:
+            r = d.get("rect")
+            if r is None:
+                continue
+            r = fitz.Rect(r)
+            if r.width > 0 and r.height > 0:
+                rects.append(r)
+
+        if not rects:
+            return None
+
+        # Drop hair-line page furniture and ultra-tiny marks (rules, separator
+        # lines, single tick marks would each be filtered, but their union
+        # would survive — we only filter rects that are tiny in BOTH axes).
+        min_area = page_area * 0.001
+        rects = [r for r in rects if (r.width * r.height) >= min_area or (r.width > 5 and r.height > 5)]
+        if not rects:
+            return None
+
+        # Drop rects that lie almost entirely inside a text block (citation
+        # underlines, equation horizontal rules, in-line decorations).
+        text_blocks: list[fitz.Rect] = []
+        try:
+            for b in page.get_text("blocks"):
+                # blocks tuple: (x0, y0, x1, y1, text, block_no, block_type).
+                # block_type 0 == text, 1 == image. Treat both as text-like
+                # for "is this just decoration in a paragraph" purposes.
+                text_blocks.append(fitz.Rect(b[0], b[1], b[2], b[3]))
+        except Exception:
+            pass
+
+        def heavily_in_text(r: fitz.Rect) -> bool:
+            for tb in text_blocks:
+                inter = fitz.Rect(r) & tb
+                if inter.is_empty:
+                    continue
+                if (inter.width * inter.height) > 0.7 * (r.width * r.height):
+                    return True
+            return False
+
+        graphical = [r for r in rects if not heavily_in_text(r)]
+        if not graphical:
+            graphical = rects  # don't strand pages whose figure overlapped a label block
+
+        # Cluster spatially: rects within `gap` points of each other belong
+        # to the same figure. Then pick the cluster covering the most area.
+        gap = 18.0  # ~quarter-inch at 72 DPI
+
+        def expanded(r: fitz.Rect) -> fitz.Rect:
+            return fitz.Rect(r.x0 - gap, r.y0 - gap, r.x1 + gap, r.y1 + gap)
+
+        clusters: list[list[fitz.Rect]] = []
+        for r in graphical:
+            placed = False
+            for c in clusters:
+                if any(expanded(cr).intersects(r) for cr in c):
+                    c.append(r)
+                    placed = True
+                    break
+            if not placed:
+                clusters.append([r])
+
+        # Greedy second pass: clusters that grew until they touch each other.
+        merged = True
+        while merged:
+            merged = False
+            for i in range(len(clusters)):
+                for j in range(i + 1, len(clusters)):
+                    ui = fitz.Rect(clusters[i][0])
+                    for r in clusters[i][1:]:
+                        ui |= r
+                    uj = fitz.Rect(clusters[j][0])
+                    for r in clusters[j][1:]:
+                        uj |= r
+                    if expanded(ui).intersects(uj):
+                        clusters[i].extend(clusters[j])
+                        clusters.pop(j)
+                        merged = True
+                        break
+                if merged:
+                    break
+
+        def cluster_bbox(c: list[fitz.Rect]) -> fitz.Rect:
+            u = fitz.Rect(c[0])
+            for r in c[1:]:
+                u |= r
+            return u
+
+        best = max(clusters, key=lambda c: cluster_bbox(c).width * cluster_bbox(c).height)
+        bbox = cluster_bbox(best)
+
+        # Guard against runaway unions covering the whole page (e.g. when
+        # the figure spans full-width and we accidentally sucked in headers).
+        if (bbox.width * bbox.height) > 0.85 * page_area:
+            biggest = max(graphical, key=lambda r: r.width * r.height)
+            bbox = fitz.Rect(biggest)
+
+        # Reject results that are too small to be a real figure.
+        if (bbox.width * bbox.height) < 0.05 * page_area:
+            return None
+        if bbox.width < 0.20 * pw and bbox.height < 0.20 * ph:
+            return None
+
+        # Pad slightly so axis tick labels at the rim aren't clipped.
+        pad = 4.0
+        x0 = max(0.0, bbox.x0 - pad)
+        y0 = max(0.0, bbox.y0 - pad)
+        x1 = min(pw, bbox.x1 + pad)
+        y1 = min(ph, bbox.y1 + pad)
+        return (x0, y0, x1, y1)
 
 
 def crop_whitespace(png_bytes: bytes) -> bytes:
@@ -489,11 +646,15 @@ def main() -> int:
                     pages = []
                 if pages:
                     idx = pick_figure_page(gh, pages, title)
-                    log(f"  picked page {idx}")
-                    # Re-render the chosen page at higher DPI for the saved
-                    # card image — the in-prompt thumbnails are intentionally
-                    # low-DPI to keep the vision call cheap.
-                    hi = render_pdf_page_hires(pdf_path, idx) or pages[idx]
+                    # Try to crop to just the figure region using PyMuPDF's
+                    # geometry; fall back to the full page if we can't tell.
+                    clip = None
+                    try:
+                        clip = figure_bbox_in_page(pdf_path, idx)
+                    except Exception as e:
+                        log(f"  figure bbox detection failed: {e}")
+                    log(f"  picked page {idx}" + (" (cropped to figure)" if clip else " (full page)"))
+                    hi = render_pdf_page_hires(pdf_path, idx, clip=clip) or pages[idx]
                     try:
                         cropped = crop_whitespace(hi)
                     except Exception:
