@@ -53,6 +53,20 @@ MODEL_NAME = os.environ.get("MODEL_NAME", "openai/gpt-4o-mini")
 # Recent-bias: how many of the most recent papers to pull from the library.
 ADS_FETCH_ROWS = 30
 
+# Rate-limit handling for GitHub Models.
+# The free tier enforces requests-per-minute, tokens-per-minute, and a
+# daily quota. Cap any Retry-After we honour at MAX_RATELIMIT_WAIT so a
+# day-long backoff doesn't hang the workflow — we'll just resume next run
+# (the per-paper cache means already-finished work is skipped).
+MAX_RATELIMIT_WAIT = int(os.environ.get("MAX_RATELIMIT_WAIT", "180"))
+REQUEST_SPACING = float(os.environ.get("REQUEST_SPACING", "5"))
+
+# Vision payload knobs. With detail="low" each image costs ~85 tokens
+# regardless of resolution, which keeps the figure-pick call well inside
+# the per-minute token ceiling.
+FIGURE_MAX_PAGES = int(os.environ.get("FIGURE_MAX_PAGES", "8"))
+FIGURE_RENDER_DPI = int(os.environ.get("FIGURE_RENDER_DPI", "100"))
+
 
 def log(msg: str) -> None:
     print(msg, flush=True)
@@ -162,8 +176,16 @@ def download_arxiv_pdf(arxiv: str, dest: pathlib.Path) -> bool:
     return True
 
 
-def render_pdf_pages(pdf_path: pathlib.Path, max_pages: int = 12) -> list[bytes]:
-    """Render the first `max_pages` pages of a PDF to PNG bytes."""
+def render_pdf_pages(pdf_path: pathlib.Path,
+                     max_pages: int = FIGURE_MAX_PAGES,
+                     dpi: int = FIGURE_RENDER_DPI) -> list[bytes]:
+    """Render the first `max_pages` pages of a PDF to PNG bytes.
+
+    We render at modest DPI because the model uses `detail: low` for the
+    figure-pick call (where it only needs to recognise figure-vs-text
+    layout), and we re-render the chosen page at high DPI separately for
+    the saved card image.
+    """
     import fitz  # PyMuPDF
 
     out: list[bytes] = []
@@ -171,10 +193,20 @@ def render_pdf_pages(pdf_path: pathlib.Path, max_pages: int = 12) -> list[bytes]
         for i, page in enumerate(doc):
             if i >= max_pages:
                 break
-            # 144 dpi gives a crisp thumbnail without huge payloads.
-            pm = page.get_pixmap(dpi=144, alpha=False)
+            pm = page.get_pixmap(dpi=dpi, alpha=False)
             out.append(pm.tobytes("png"))
     return out
+
+
+def render_pdf_page_hires(pdf_path: pathlib.Path, index: int, dpi: int = 160) -> bytes | None:
+    """Re-render a specific page at higher DPI for use as the card image."""
+    import fitz
+
+    with fitz.open(pdf_path) as doc:
+        if not (0 <= index < len(doc)):
+            return None
+        pm = doc[index].get_pixmap(dpi=dpi, alpha=False)
+        return pm.tobytes("png")
 
 
 def crop_whitespace(png_bytes: bytes) -> bytes:
@@ -220,33 +252,70 @@ def _gh_models_session(token: str) -> requests.Session:
 
 
 def gh_models_chat(session: requests.Session, messages: list[dict[str, Any]],
-                   max_tokens: int = 600, retries: int = 3) -> str:
+                   max_tokens: int = 600, retries: int = 6) -> str:
+    """Call GitHub Models chat completions, honouring Retry-After on 429s."""
     body = {
         "model": MODEL_NAME,
         "messages": messages,
         "temperature": 0.2,
         "max_tokens": max_tokens,
     }
-    last_err: Exception | None = None
     for attempt in range(retries):
         try:
             r = session.post(
                 f"{GH_MODELS_BASE}/chat/completions",
                 json=body,
-                timeout=90,
+                timeout=120,
             )
-            if r.status_code == 429:
-                # Free tier is rate-limited; back off.
-                wait = 10 * (attempt + 1)
-                log(f"  rate-limited; sleeping {wait}s")
-                time.sleep(wait)
-                continue
-            r.raise_for_status()
-            return r.json()["choices"][0]["message"]["content"].strip()
         except requests.RequestException as e:
-            last_err = e
-            time.sleep(2 ** attempt)
-    raise RuntimeError(f"GitHub Models call failed after {retries} attempts: {last_err}")
+            wait = min(60, 2 ** attempt)
+            log(f"  request error ({e}); sleeping {wait}s")
+            time.sleep(wait)
+            continue
+
+        if r.status_code == 429:
+            # Free-tier limits are per-minute (TPM/RPM) and per-day. Honour
+            # whichever Retry-After-style header GitHub sends; cap the wait
+            # so a daily-quota response doesn't hang the workflow for hours.
+            ra = (
+                r.headers.get("Retry-After")
+                or r.headers.get("retry-after")
+                or r.headers.get("x-ratelimit-timeremaining")
+            )
+            try:
+                wait = int(float(ra)) if ra is not None else 0
+            except ValueError:
+                wait = 0
+            if wait <= 0:
+                wait = 20 * (attempt + 1)
+            wait = min(wait, MAX_RATELIMIT_WAIT)
+            try:
+                msg = r.json().get("error", {}).get("message", "")
+            except Exception:
+                msg = (r.text or "")[:200]
+            log(f"  rate-limited (attempt {attempt + 1}/{retries}); sleeping {wait}s — {msg}")
+            time.sleep(wait)
+            continue
+
+        if 500 <= r.status_code < 600:
+            wait = min(60, 5 * (attempt + 1))
+            log(f"  server error {r.status_code}; sleeping {wait}s")
+            time.sleep(wait)
+            continue
+
+        if not r.ok:
+            try:
+                msg = r.json().get("error", {}).get("message", "")
+            except Exception:
+                msg = (r.text or "")[:200]
+            raise RuntimeError(f"GitHub Models {r.status_code}: {msg}")
+
+        # Be polite between successful calls so we don't immediately re-trip
+        # the per-minute TPM ceiling on the next request.
+        time.sleep(REQUEST_SPACING)
+        return r.json()["choices"][0]["message"]["content"].strip()
+
+    raise RuntimeError(f"GitHub Models still rate-limited after {retries} attempts")
 
 
 def pick_figure_page(session: requests.Session, page_pngs: list[bytes],
@@ -272,7 +341,12 @@ def pick_figure_page(session: requests.Session, page_pngs: list[bytes],
         b64 = base64.b64encode(png).decode("ascii")
         content.append({
             "type": "image_url",
-            "image_url": {"url": f"data:image/png;base64,{b64}"},
+            "image_url": {
+                "url": f"data:image/png;base64,{b64}",
+                # detail=low fixes the per-image cost at ~85 input tokens,
+                # which is essential for staying under the free-tier TPM.
+                "detail": "low",
+            },
         })
 
     try:
@@ -416,10 +490,14 @@ def main() -> int:
                 if pages:
                     idx = pick_figure_page(gh, pages, title)
                     log(f"  picked page {idx}")
+                    # Re-render the chosen page at higher DPI for the saved
+                    # card image — the in-prompt thumbnails are intentionally
+                    # low-DPI to keep the vision call cheap.
+                    hi = render_pdf_page_hires(pdf_path, idx) or pages[idx]
                     try:
-                        cropped = crop_whitespace(pages[idx])
+                        cropped = crop_whitespace(hi)
                     except Exception:
-                        cropped = pages[idx]
+                        cropped = hi
                     img_path = FIGURE_DIR / f"{bib.replace('/', '_')}.png"
                     img_path.write_bytes(cropped)
                     figure_path = "/" + img_path.relative_to(ROOT).as_posix()
