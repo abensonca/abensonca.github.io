@@ -58,8 +58,8 @@ ADS_FETCH_ROWS = 30
 # daily quota. Cap any Retry-After we honour at MAX_RATELIMIT_WAIT so a
 # day-long backoff doesn't hang the workflow — we'll just resume next run
 # (the per-paper cache means already-finished work is skipped).
-MAX_RATELIMIT_WAIT = int(os.environ.get("MAX_RATELIMIT_WAIT", "180"))
-REQUEST_SPACING = float(os.environ.get("REQUEST_SPACING", "5"))
+MAX_RATELIMIT_WAIT = int(os.environ.get("MAX_RATELIMIT_WAIT", "600"))
+REQUEST_SPACING = float(os.environ.get("REQUEST_SPACING", "60"))
 
 # Vision payload knobs. With detail="low" each image costs ~85 tokens
 # regardless of resolution, which keeps the figure-pick call well inside
