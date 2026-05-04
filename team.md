@@ -5,8 +5,6 @@ subtitle: Current members and alumni
 permalink: /team/
 ---
 
-This page is generated automatically from
-[`_data/members.yml`](https://github.com/{{ site.author.github }}/{{ site.github.repository_name }}/blob/main/_data/members.yml).
 For alumni who provided an ORCID iD, current affiliations are refreshed on a
 schedule from their ORCID profile.
 

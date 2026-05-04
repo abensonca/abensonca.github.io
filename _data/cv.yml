@@ -7,25 +7,37 @@ current:
   affiliation: The Observatories of the Carnegie Institution for Science
 
 positions:
-  - date: 2014 – present
+  - date: 2015 – present
     title: Staff Scientist
     detail: The Observatories of the Carnegie Institution for Science, Pasadena, CA
-  - date: 2012 – 2014
-    title: Moore Center for Theoretical Cosmology and Physics, postdoctoral scholar
+  - date: 2012 – 2015
+    title: George Ellery Hale Distinguished Scholar in Theoretical Astrophysics
+    detail: The Observatories of the Carnegie Institution for Science, Pasadena, CA
+  - date: 2006 – 2012
+    title: Moore Center for Theoretical Cosmology and Physics, Senior Research Fellow
     detail: California Institute of Technology
   # Add earlier positions here.
 
 education:
-  - date: PhD
-    title: Astronomy
-    detail: University of Cambridge
+  - date: 2000
+    title: PhD in Astrophysics
+    detail: University of Durham
+  - date: 1997
+    title: MPhys in Physics with Astrophysics
+    detail: University of Leicester
   # Add earlier degrees here.
 
 awards:
   # Example entry — replace with real awards.
-  # - date: 2023
-  #   title: Some Award
-  #   detail: Awarding organization
+  - date: 2003
+    title: Royal Society University Research Fellowship
+    detail: Awarded to conduct research at the University of Oxford
+  - date: 2000
+    title: Prize Fellowship in Theoretical Astrophysics
+    detail: Awarded to conduct research at Caltech
+  - date: 2000
+    title: Michael Penston Astronomy Prize
+    detail: Royal Astronomical Society awarded for the best U.K. PhD thesis in astronomy and astrophysics
 
 service:
   - date: ongoing

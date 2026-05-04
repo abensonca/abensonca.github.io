@@ -15,19 +15,12 @@
   docs: https://github.com/galacticusorg/galacticus/wiki
   image: /assets/img/colors.png
 
-- name: GalacticusAuxiliary
+- name: Dendros
   description: >
     Companion analysis tooling for Galacticus — convergence diagnostics,
     posterior visualization, and helpers for emulator training.
   language: Python
-  role: Maintainer
-  url: https://github.com/galacticusorg
-
-- name: SubhaloEvolution
-  description: >
-    Reference implementation of the semi-analytic tidal-evolution model from
-    Benson & Du (2022) — a fast, accurate alternative to N-body integration of
-    individual subhalo orbits.
-  language: Python
-  role: Author
-  paper: https://ui.adsabs.harvard.edu/abs/2022MNRAS.517.1398B
+  role: Lead developr
+  url: https://github.com/galacticusorg/dendros
+  docs: https://dendros.readthedocs.io/en/latest/index.html
+  image: /assets/img/corner.png
