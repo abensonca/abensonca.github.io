@@ -1,197 +1,147 @@
-# Research-group manifest. Edit this file to add or move members.
-#
-# Each member entry supports:
-#   name                  : (required)
-#   role                  : (required) e.g. "CTAC Fellow", "Graduate student (USC)"
-#   status                : "current" or "alumni" (required)
-#   website               : personal site URL
-#   linkedin              : LinkedIn profile URL (used as a display link only)
-#   github                : GitHub username
-#   orcid                 : ORCID iD (no URL prefix). If set, the scheduled
-#                           ORCID workflow will fill in current_affiliation.
-#   current_affiliation   : Auto-managed for ORCID-equipped alumni. You may also
-#                           edit by hand for those without ORCIDs.
-#   affiliation_locked    : true to prevent the scheduled job from overwriting
-#                           current_affiliation (e.g. if you want a custom value).
-
 - name: Nicole Sanchez
   role: Carnegie/Caltech Postdoctoral Fellow
   status: current
   website: https://nnicolesanchez.github.io/
-
 - name: Sten Delos
   role: CTAC Postdoctoral Fellow
   status: current
   website: https://stendelos.com/
-
 - name: Paul Menker
   role: Graduate student (USC)
   status: current
-
 - name: Dimple Sarnaaik
   role: Graduate student (USC)
   status: current
   linkedin: https://www.linkedin.com/in/dimple-sarnaaik-30b503143
-
 - name: Jack Lonergan
   role: Graduate student (USC)
   status: current
-
 - name: Siddhesh Raut
   role: Graduate student (USC)
   status: current
   website: https://www.linkedin.com/in/siddheshraut/
-
 - name: Yu Zhao
   role: Graduate student (USC)
   status: current
-
-# ----- Alumni -----------------------------------------------------------
-
 - name: Niusha Ahvazi
   role: Graduate student (UCR)
   status: alumni
   website: https://astronomy.as.virginia.edu/niusha-ahvazi
-  current_affiliation: GECO Postdoctoral Fellow,  University of Virginia
+  current_affiliation: Graduate Student, University of California, Riverside
   orcid: 0009-0002-1233-2013
-
 - name: Ethan Nadler
   role: CTAC Postdoctoral Fellow
   status: alumni
   website: https://eonadler.github.io/
-  current_affiliation: Professor, UCSD
+  current_affiliation: Assistant Professor, UC San Diego
   orcid: 0000-0002-1182-3825
-
 - name: Shengqi Yang
   role: CTAC Postdoctoral Fellow
   status: alumni
   website: https://www.linkedin.com/in/shengqi-yang-06397b309/
   current_affiliation: Software Engineer, Machine Learning, Meta
-
 - name: Xiaolong Du
   role: Postdoctoral fellow
   status: alumni
   website: https://xiaolong-du.github.io/
-  current_affiliation: Faculty member, Nankai University
+  current_affiliation: Associate professor, Nankai University
   orcid: 0000-0003-0728-2533
-
 - name: Fangzhou Jiang
   role: CTAC Postdoctoral Fellow
   status: alumni
   website: https://www.fzjiang.com/
-  current_affiliation: Assistant Professor, KIAA
+  current_affiliation: Assistant Professor, Peking University The Kavli Institute for Astronomy and Astrophysics
   orcid: 0000-0001-6115-0633
-
 - name: David Gonzalez-Dysinger
   role: Graduate student (USC)
   status: alumni
-
 - name: Juan Quiroz
   role: Undergraduate student (Caltech)
   status: alumni
-
 - name: Ellen Min
   role: CASSI summer intern (Caltech)
   status: alumni
-
 - name: Madeline Overton
   role: CASSI summer intern (SDSU, summer 2021)
   status: alumni
   orcid: 0009-0000-7649-0593
-
+  current_affiliation: Graduate Student, University of Nevada, Las Vegas
 - name: Shalini Kurinchi-Vendhan
   role: CASSI/SURF summer intern (Caltech, summer 2021)
   status: alumni
   orcid: 0009-0007-8974-9016
-
 - name: Turner Johnson
   role: Undergraduate student (Haverford College)
   status: alumni
   orcid: 0000-0002-8702-7825
-
 - name: Yu Lu
   role: Postdoctoral scholar
   status: alumni
   current_affiliation: Lam Research
-
 - name: Milan Roberson
   role: Undergraduate student (Caltech)
   status: alumni
   linkedin: https://www.linkedin.com/in/milan-roberson-705a5b160/
-
 - name: Zoey Flynn
   role: Undergraduate student (Caltech)
   status: alumni
-
 - name: Daniel McAndrew
   role: Undergraduate student (Caltech)
   status: alumni
   linkedin: https://www.linkedin.com/in/daniel-estevan-mcandrew/
   current_affiliation: Machine Learning Engineer, Akamai Technologies
-
 - name: Gabe Currier
   role: Undergraduate student (Caltech)
   status: alumni
-
 - name: Andrea Kulier
   role: Postdoctoral researcher
   status: alumni
   website: http://www.astro-udec.cl/rdemarco/GaTOS/members.html
   current_affiliation: Catholic University of Chile
-
 - name: Daniel Grin
   role: Graduate student (Caltech)
   status: alumni
   website: https://www.haverford.edu/users/dgrin
   current_affiliation: Assistant Professor of Physics & Astronomy, Haverford College
-
 - name: Laura Book
   role: Graduate student (Caltech)
   status: alumni
   linkedin: https://www.linkedin.com/in/booklaura/
   current_affiliation: Staff Privacy Engineer, Snap
-
 - name: Arya Farahi
   role: Undergraduate student
   status: alumni
   website: https://afarahi.github.io/
   current_affiliation: University of Michigan
-
 - name: Stéphane Mangeon
   role: Undergraduate student
   status: alumni
   linkedin: https://www.linkedin.com/in/smangeon/
   current_affiliation: Spatial & Temporal Data Science, Data61
-
 - name: Michael Maseda
   role: Undergraduate student
   status: alumni
   website: https://home.strw.leidenuniv.nl/~maseda/
   current_affiliation: NOVA Fellow, Leiden Observatory
-
 - name: Martin Stringer
   role: Graduate student (Oxford)
   status: alumni
   website: https://researchers.uq.edu.au/researcher/14653
   current_affiliation: Research Fellow, University of Queensland
   orcid: 0000-0003-0021-7915
-
 - name: Marios Kampakoglou
   role: Graduate student (Oxford)
   status: alumni
   linkedin: https://www.linkedin.com/in/marios-kampakoglou-23793466/
   current_affiliation: Chief Disruptor in Data Analytics, National Bank of Greece
-
 - name: Lauren Bose
   role: Undergraduate student (Caltech)
   status: alumni
   linkedin: https://www.linkedin.com/in/lauren-bose-53b47031/
   current_affiliation: Data Science Manager, Twitter
-
 - name: Tom Fox
   role: Undergraduate student (Caltech)
   status: alumni
-
 - name: Fernando Torres
   role: Undergraduate student (Caltech)
   status: alumni
