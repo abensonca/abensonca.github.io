@@ -12,47 +12,6 @@
     previously estimated. This advancement enhances the potential of stellar streams as tools for probing
     dark matter properties.
   figure: /assets/img/papers/2026MNRAS.548ag538M.png
-- bibcode: 2026ApJ..1001..151D
-  title: 'Stellar Mass Growth in the First Galaxies: Theory and Observation'
-  authors_short: Dressler, Alan, A. Benson, et al.
-  year: 2026
-  venue: The Astrophysical Journal
-  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1001..151D
-  arxiv: https://arxiv.org/abs/2602.01549
-  doi: 10.3847/1538-4357/ae40bd
-  summary: This study finds strong agreement between observed stellar mass growth in early galaxies and
-    predictions from the GALACTICUS model, highlighting the importance of stellar mass as a fundamental
-    measure in galaxy formation. The results suggest that significant in situ growth and mergers contributed
-    to stellar mass increases during the early universe, challenging previous claims about the dominance
-    of star formation bursts.
-  figure: /assets/img/papers/2026ApJ..1001..151D.png
-- bibcode: 2026MNRAS.547ag500Z
-  title: 'The THESAN project: environmental drivers of Local Group reionization'
-  authors_short: Zhao, Yu, A. Benson, et al.
-  year: 2026
-  venue: Monthly Notices of the Royal Astronomical Society
-  url: https://ui.adsabs.harvard.edu/abs/2026MNRAS.547ag500Z
-  arxiv: https://arxiv.org/abs/2507.16245
-  doi: 10.1093/mnras/stag500
-  summary: The THESAN project reveals that the timing of cosmic reionization in Local Group analogues
-    is significantly influenced by their surrounding environment, with denser regions ionizing earlier.
-    This research enhances understanding of how large-scale structures affect reionization, providing
-    insights into the early histories of galaxies like the Milky Way.
-  figure: /assets/img/papers/2026MNRAS.547ag500Z.png
-- bibcode: 2026arXiv260405237N
-  title: 'JWST Lensed Quasar Dark Matter Survey V: Measuring the minimum halo mass with strong gravitational
-    lensing'
-  authors_short: Nierenberg, A. M., A. Benson, et al.
-  year: 2026
-  venue: arXiv e-prints
-  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260405237N
-  arxiv: https://arxiv.org/abs/2604.05237
-  doi: 10.48550/arXiv.2604.05237
-  summary: This study establishes a new upper limit on the minimum halo mass in cold dark matter models,
-    finding it to be less than \(10^{8.3}\) solar masses using strong gravitational lensing data. The
-    results indicate that future observations of more lensed quasars could significantly refine our understanding
-    of dark matter structures in the universe.
-  figure: /assets/img/papers/2026arXiv260405237N.png
 - bibcode: 2026arXiv260408647C
   title: 'Bypassed Core Formation in Milky Way-Mass SIDM Halos: Implications for the Local Group Past-Pericenter
     Scenario'
@@ -68,6 +27,47 @@
     to tidal disruptions, while the diffuse stellar halo is more vulnerable, emphasizing the complex dynamics
     of galaxy interactions in the Local Group.
   figure: /assets/img/papers/2026arXiv260408647C.png
+- bibcode: 2026arXiv260405237N
+  title: 'JWST Lensed Quasar Dark Matter Survey V: Measuring the minimum halo mass with strong gravitational
+    lensing'
+  authors_short: Nierenberg, A. M., A. Benson, et al.
+  year: 2026
+  venue: arXiv e-prints
+  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260405237N
+  arxiv: https://arxiv.org/abs/2604.05237
+  doi: 10.48550/arXiv.2604.05237
+  summary: This study establishes a new upper limit on the minimum halo mass in cold dark matter models,
+    finding it to be less than \(10^{8.3}\) solar masses using strong gravitational lensing data. The
+    results indicate that future observations of more lensed quasars could significantly refine our understanding
+    of dark matter structures in the universe.
+  figure: /assets/img/papers/2026arXiv260405237N.png
+- bibcode: 2026MNRAS.547ag500Z
+  title: 'The THESAN project: environmental drivers of Local Group reionization'
+  authors_short: Zhao, Yu, A. Benson, et al.
+  year: 2026
+  venue: Monthly Notices of the Royal Astronomical Society
+  url: https://ui.adsabs.harvard.edu/abs/2026MNRAS.547ag500Z
+  arxiv: https://arxiv.org/abs/2507.16245
+  doi: 10.1093/mnras/stag500
+  summary: The THESAN project reveals that the timing of cosmic reionization in Local Group analogues
+    is significantly influenced by their surrounding environment, with denser regions ionizing earlier.
+    This research enhances understanding of how large-scale structures affect reionization, providing
+    insights into the early histories of galaxies like the Milky Way.
+  figure: /assets/img/papers/2026MNRAS.547ag500Z.png
+- bibcode: 2026ApJ..1001..151D
+  title: 'Stellar Mass Growth in the First Galaxies: Theory and Observation'
+  authors_short: Dressler, Alan, A. Benson, et al.
+  year: 2026
+  venue: The Astrophysical Journal
+  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1001..151D
+  arxiv: https://arxiv.org/abs/2602.01549
+  doi: 10.3847/1538-4357/ae40bd
+  summary: This study finds strong agreement between observed stellar mass growth in early galaxies and
+    predictions from the GALACTICUS model, highlighting the importance of stellar mass as a fundamental
+    measure in galaxy formation. The results suggest that significant in situ growth and mergers contributed
+    to stellar mass increases during the early universe, challenging previous claims about the dominance
+    of star formation bursts.
+  figure: /assets/img/papers/2026ApJ..1001..151D.png
 - bibcode: 2026arXiv260422013R
   title: An Extended Parametric Model for Self-interacting Dark Matter Halos
   authors_short: Raut, Siddhesh, A. Benson, et al.
