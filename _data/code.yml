@@ -20,7 +20,18 @@
     Companion analysis tooling for Galacticus — convergence diagnostics,
     posterior visualization, and helpers for emulator training.
   language: Python
-  role: Lead developr
+  role: Lead developer
   url: https://github.com/galacticusorg/dendros
   docs: https://dendros.readthedocs.io/en/latest/index.html
   image: /assets/img/corner.png
+
+- name: astrosylva
+  description: >
+    A Python library and CLI that converts halo merger-tree catalogues —
+    Consistent-Trees, LHaloTree, SubLink, and AHF — into the Galacticus HDF5
+    input format. A Python port of the original C utility rockstar2galacticus.
+  language: Python
+  role: Lead developer
+  url: https://github.com/galacticusorg/astrosylva
+  docs: https://astrosylva.readthedocs.io
+  image: /assets/img/brownian_bridge.png
