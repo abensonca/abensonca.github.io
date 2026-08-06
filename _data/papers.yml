@@ -7,11 +7,12 @@
   url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1006..125D
   arxiv: https://arxiv.org/abs/2512.04156
   doi: 10.3847/1538-4357/ae7bed
-  summary: The dense central cusps that every dark matter halo is born with turn out to leave a measurable
-    imprint on the motions of stars in the smallest galaxies, and the observed velocity dispersions of
-    Tucana V and Triangulum II sit awkwardly with what warm dark matter would predict. Taken together,
-    the three faintest Milky Way satellites push the mass of a thermal-relic dark matter particle above
-    5.8 keV.
+  summary: Every dark matter halo forms with a dense spike at its center, and if dark matter is "warm"
+    enough to erase small-scale structure those spikes are heavy enough to speed up the stars in the smallest
+    galaxies — yet the stars in Tucana V and Triangulum II move far too slowly to match. Taken together,
+    the three faintest Milky Way satellites rule out dark matter particles lighter than 5.8 keV at 95%
+    confidence, a limit that better velocity measurements or the discovery of more such galaxies could
+    sharpen considerably.
   figure: /assets/img/papers/2026ApJ..1006..125D.png
 - bibcode: 2026ApJ..1006L..65N
   title: 'Warm, Not Fuzzy: Generalized Ultralight Dark Matter Limits from Milky Way Satellites'
