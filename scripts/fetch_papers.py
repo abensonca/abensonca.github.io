@@ -4,35 +4,35 @@ Refresh _data/papers.yml from a NASA ADS library.
 
 Pipeline per paper:
   1. Pull recent bibcodes from the ADS library, biased toward recent ones.
-  2. Fetch metadata (title, authors, year, venue, DOI, arXiv id).
+  2. Fetch metadata (title, authors, year, venue, DOI, arXiv id, abstract).
   3. Try to download the arXiv PDF; render its pages.
-  4. Ask a small vision-capable model on GitHub Models to pick the
-     single page with the most representative figure.
-  5. Crop that page (top/bottom whitespace) and save as a PNG.
-  6. Ask the same model for a short plain-English summary.
-  7. Write the result to _data/papers.yml so Jekyll can render cards.
+  4. Score each page's dominant graphical region and pick the best figure page.
+  5. Crop to that figure and save as a PNG.
+  6. Write the result to _data/papers.yml so Jekyll can render cards.
+
+No model is called here. Summaries are written by scripts/summaries.py, run
+from Claude Code, into _data/papers_cache.yml — a durable per-bibcode store of
+summaries, abstracts, and figure paths that is never pruned. papers.yml holds
+only the papers currently on the front page, so without that cache a paper
+that rotated out and later returned would need its summary regenerated.
 
 Required environment:
   ADS_API_TOKEN     Personal NASA ADS token (https://ui.adsabs.harvard.edu/user/settings/token)
-  GITHUB_TOKEN      Token with `models:read` (workflows: github.token works)
 
 Optional:
   ADS_LIBRARY_ID    Overrides _config.yml's ads_library_id.
   PAPERS_LIMIT      How many papers to keep (default 6).
-  MODEL_NAME        GitHub Models model name (default openai/gpt-4o-mini).
 """
 
 from __future__ import annotations
 
-import base64
+import html
 import io
-import json
 import os
 import pathlib
 import random
 import re
 import sys
-import time
 import urllib.parse
 from typing import Any
 
@@ -41,31 +41,25 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_FILE = ROOT / "_data" / "papers.yml"
+CACHE_FILE = ROOT / "_data" / "papers_cache.yml"
 FIGURE_DIR = ROOT / "assets" / "img" / "papers"
 FIGURE_DIR.mkdir(parents=True, exist_ok=True)
 
 ADS_BASE = "https://api.adsabs.harvard.edu/v1"
-GH_MODELS_BASE = "https://models.github.ai/inference"
 
 PAPERS_LIMIT = int(os.environ.get("PAPERS_LIMIT", "6"))
-MODEL_NAME = os.environ.get("MODEL_NAME", "openai/gpt-4o-mini")
 
 # Recent-bias: how many of the most recent papers to pull from the library.
 ADS_FETCH_ROWS = 30
 
-# Rate-limit handling for GitHub Models.
-# The free tier enforces requests-per-minute, tokens-per-minute, and a
-# daily quota. Cap any Retry-After we honour at MAX_RATELIMIT_WAIT so a
-# day-long backoff doesn't hang the workflow — we'll just resume next run
-# (the per-paper cache means already-finished work is skipped).
-MAX_RATELIMIT_WAIT = int(os.environ.get("MAX_RATELIMIT_WAIT", "600"))
-REQUEST_SPACING = float(os.environ.get("REQUEST_SPACING", "60"))
-
-# Vision payload knobs. With detail="low" each image costs ~85 tokens
-# regardless of resolution, which keeps the figure-pick call well inside
-# the per-minute token ceiling.
+# How many leading pages to consider when hunting for the figure, and at what
+# resolution to render them. The chosen page is re-rendered at high DPI.
 FIGURE_MAX_PAGES = int(os.environ.get("FIGURE_MAX_PAGES", "8"))
 FIGURE_RENDER_DPI = int(os.environ.get("FIGURE_RENDER_DPI", "100"))
+
+# Figure/table captions, so they can be kept out of the cropped card image —
+# at card size the caption text is unreadable and just crowds the figure.
+CAPTION_RE = re.compile(r"\s*(?:Figure|Fig\.?|Table|TAB\.?|FIG\.?)\s*\d", re.IGNORECASE)
 
 
 def log(msg: str) -> None:
@@ -75,6 +69,17 @@ def log(msg: str) -> None:
 # --------------------------------------------------------------------------
 # ADS
 # --------------------------------------------------------------------------
+
+
+def ads_token() -> str | None:
+    """ADS token from the environment, falling back to the standard dotfile."""
+    token = os.environ.get("ADS_API_TOKEN")
+    if token:
+        return token.strip()
+    dotfile = pathlib.Path.home() / ".ads" / "dev_key"
+    if dotfile.exists():
+        return dotfile.read_text().strip() or None
+    return None
 
 
 def _ads_session(token: str) -> requests.Session:
@@ -118,6 +123,7 @@ def fetch_paper_metadata(session: requests.Session, bibcodes: list[str]) -> list
         "pubdate",
         "doi",
         "identifier",
+        "alternate_bibcode",
         "abstract",
         "page",
     ])
@@ -133,11 +139,35 @@ def fetch_paper_metadata(session: requests.Session, bibcodes: list[str]) -> list
     return [by_bib[b] for b in bibcodes if b in by_bib]
 
 
+def strip_markup(text: str) -> str:
+    """Flatten the HTML/MathML that ADS embeds in titles and abstracts.
+
+    ADS returns things like `with <inline-formula><mml:math><mml:mi>N</mml:mi>
+    </mml:math></inline-formula>-body simulations` and `r<SUP>-1.5</SUP>`.
+    Dropping the tags and keeping their text gives "with N-body simulations"
+    and "r-1.5" — readable in a card title, and clean input for summarizing.
+    """
+    if not text:
+        return ""
+    text = re.sub(r"<[^>]+>", "", text)
+    text = html.unescape(text)
+    return " ".join(text.split())
+
+
 def arxiv_id(doc: dict[str, Any]) -> str | None:
     for ident in doc.get("identifier", []) or []:
         m = re.match(r"^(?:arXiv:)?(\d{4}\.\d{4,5})", ident)
         if m:
             return m.group(1)
+
+    # ADS intermittently returns a truncated `identifier` list for published
+    # records — just the bibcode and DOI, with the eprint id missing. The
+    # preprint's own bibcode (2026arXiv260515371N) encodes the same id, so
+    # recover it from there rather than losing the arXiv link for a week.
+    for alt in list(doc.get("alternate_bibcode") or []) + [doc.get("bibcode") or ""]:
+        m = re.match(r"^\d{4}arXiv(\d{4})(\d{4,5})", str(alt))
+        if m:
+            return f"{m.group(1)}.{m.group(2)}"
     return None
 
 
@@ -181,10 +211,9 @@ def render_pdf_pages(pdf_path: pathlib.Path,
                      dpi: int = FIGURE_RENDER_DPI) -> list[bytes]:
     """Render the first `max_pages` pages of a PDF to PNG bytes.
 
-    We render at modest DPI because the model uses `detail: low` for the
-    figure-pick call (where it only needs to recognise figure-vs-text
-    layout), and we re-render the chosen page at high DPI separately for
-    the saved card image.
+    Modest DPI is fine here: these renders are only used as a fallback if the
+    high-DPI re-render of the chosen page fails. Page *selection* works off
+    PDF geometry, not these images.
     """
     import fitz  # PyMuPDF
 
@@ -239,14 +268,27 @@ def figure_bbox_in_page(pdf_path: pathlib.Path, page_idx: int) -> tuple[float, f
 
         rects: list[fitz.Rect] = []
 
+        def clipped(r: Any) -> fitz.Rect | None:
+            """Confine a rect to the visible page; drop it if nothing is left.
+
+            Figures routinely carry clipping or background paths that extend
+            well past the page edge (one seen in the wild: a 509x659 path on a
+            612pt-wide page, running out to x=808). Left unclamped, a single
+            one of those defines the whole bounding box.
+            """
+            r = fitz.Rect(r) & page.rect
+            if r.is_empty or r.width <= 0 or r.height <= 0:
+                return None
+            return r
+
         # Embedded raster images.
         for info in page.get_images(full=True):
             try:
                 bbox = page.get_image_bbox(info)
             except Exception:
                 continue
-            r = fitz.Rect(bbox)
-            if r.width > 0 and r.height > 0:
+            r = clipped(bbox)
+            if r is not None:
                 rects.append(r)
 
         # Vector drawings (paths, fills, strokes — i.e. the bones of a plot).
@@ -255,12 +297,17 @@ def figure_bbox_in_page(pdf_path: pathlib.Path, page_idx: int) -> tuple[float, f
         except Exception:
             drawings = []
         for d in drawings:
-            r = d.get("rect")
+            if d.get("rect") is None:
+                continue
+            r = clipped(d["rect"])
             if r is None:
                 continue
-            r = fitz.Rect(r)
-            if r.width > 0 and r.height > 0:
-                rects.append(r)
+            # A single vector path covering most of the page is a background
+            # or clip region, not a figure. A real figure is reconstructed
+            # from its many component paths, so dropping these loses nothing.
+            if (r.width * r.height) > 0.55 * page_area:
+                continue
+            rects.append(r)
 
         if not rects:
             return None
@@ -276,12 +323,16 @@ def figure_bbox_in_page(pdf_path: pathlib.Path, page_idx: int) -> tuple[float, f
         # Drop rects that lie almost entirely inside a text block (citation
         # underlines, equation horizontal rules, in-line decorations).
         text_blocks: list[fitz.Rect] = []
+        caption_blocks: list[fitz.Rect] = []
         try:
             for b in page.get_text("blocks"):
                 # blocks tuple: (x0, y0, x1, y1, text, block_no, block_type).
                 # block_type 0 == text, 1 == image. Treat both as text-like
                 # for "is this just decoration in a paragraph" purposes.
-                text_blocks.append(fitz.Rect(b[0], b[1], b[2], b[3]))
+                r = fitz.Rect(b[0], b[1], b[2], b[3])
+                text_blocks.append(r)
+                if CAPTION_RE.match(str(b[4] or "")):
+                    caption_blocks.append(r)
         except Exception:
             pass
 
@@ -298,58 +349,122 @@ def figure_bbox_in_page(pdf_path: pathlib.Path, page_idx: int) -> tuple[float, f
         if not graphical:
             graphical = rects  # don't strand pages whose figure overlapped a label block
 
-        # Cluster spatially: rects within `gap` points of each other belong
-        # to the same figure. Then pick the cluster covering the most area.
-        gap = 18.0  # ~quarter-inch at 72 DPI
+        # Locate the figure by drawing *density* rather than by clustering
+        # rects into connected groups. A plot is hundreds of overlapping
+        # paths — axes, ticks, grid lines, data — stacked in one band of the
+        # page, whereas the stray clip and background paths that survive the
+        # filters above are lone rects that can span a whole column. Counting
+        # how many rects cover each row separates the two cleanly; a union of
+        # touching rects cannot, because one stray rect bridges everything.
+        gap = 18.0  # bridge whitespace between panels of one figure, in points
 
-        def expanded(r: fitz.Rect) -> fitz.Rect:
-            return fitz.Rect(r.x0 - gap, r.y0 - gap, r.x1 + gap, r.y1 + gap)
+        def dense_span(lo_attr: str, hi_attr: str, extent: float,
+                       source: list[fitz.Rect]) -> tuple[float, float] | None:
+            """Find the densest contiguous band along one axis."""
+            n = int(extent) + 1
+            counts = [0] * n
+            for r in source:
+                lo = max(0, int(getattr(r, lo_attr)))
+                hi = min(n - 1, int(getattr(r, hi_attr)))
+                for i in range(lo, hi + 1):
+                    counts[i] += 1
 
-        clusters: list[list[fitz.Rect]] = []
-        for r in graphical:
-            placed = False
-            for c in clusters:
-                if any(expanded(cr).intersects(r) for cr in c):
-                    c.append(r)
-                    placed = True
-                    break
-            if not placed:
-                clusters.append([r])
+            peak = max(counts)
+            if peak <= 0:
+                return None
+            # With a single covering rect (a lone raster figure) any coverage
+            # counts; with many, require a real pile-up to exclude strays.
+            threshold = 1 if peak <= 1 else max(2, int(0.10 * peak))
 
-        # Greedy second pass: clusters that grew until they touch each other.
-        merged = True
-        while merged:
-            merged = False
-            for i in range(len(clusters)):
-                for j in range(i + 1, len(clusters)):
-                    ui = fitz.Rect(clusters[i][0])
-                    for r in clusters[i][1:]:
-                        ui |= r
-                    uj = fitz.Rect(clusters[j][0])
-                    for r in clusters[j][1:]:
-                        uj |= r
-                    if expanded(ui).intersects(uj):
-                        clusters[i].extend(clusters[j])
-                        clusters.pop(j)
-                        merged = True
-                        break
-                if merged:
-                    break
+            best_run: tuple[float, float] | None = None
+            best_mass = 0
+            start = None
+            last = 0
+            mass = 0
+            gap_run = 0
+            for i, c in enumerate(counts):
+                if c >= threshold:
+                    if start is None:
+                        start = i
+                    last = i
+                    mass += c
+                    gap_run = 0
+                elif start is not None:
+                    gap_run += 1
+                    if gap_run > gap:
+                        if mass > best_mass:
+                            best_mass, best_run = mass, (float(start), float(last))
+                        start, mass, gap_run = None, 0, 0
+            # A run still open at the end closes on the last qualifying index,
+            # not on the page edge.
+            if start is not None and mass > best_mass:
+                best_run = (float(start), float(last))
+            return best_run
 
-        def cluster_bbox(c: list[fitz.Rect]) -> fitz.Rect:
-            u = fitz.Rect(c[0])
-            for r in c[1:]:
-                u |= r
-            return u
+        rows = dense_span("y0", "y1", ph, graphical)
+        if rows is None:
+            return None
+        y_lo, y_hi = rows
 
-        best = max(clusters, key=lambda c: cluster_bbox(c).width * cluster_bbox(c).height)
-        bbox = cluster_bbox(best)
+        # Columns are measured only across the rows the figure actually
+        # occupies, so text elsewhere on the page can't widen the box.
+        in_band = [r for r in graphical if r.y1 >= y_lo and r.y0 <= y_hi]
+        cols = dense_span("x0", "x1", pw, in_band)
+        if cols is None:
+            return None
+        x_lo, x_hi = cols
 
-        # Guard against runaway unions covering the whole page (e.g. when
-        # the figure spans full-width and we accidentally sucked in headers).
-        if (bbox.width * bbox.height) > 0.85 * page_area:
-            biggest = max(graphical, key=lambda r: r.width * r.height)
-            bbox = fitz.Rect(biggest)
+        bbox = fitz.Rect(x_lo, y_lo, x_hi, y_hi)
+        if bbox.is_empty or bbox.width <= 0 or bbox.height <= 0:
+            return None
+
+        # The dense band is the figure's *body*; its frame, tick marks and
+        # tick labels sit in the sparse margin just outside and would be
+        # sliced off. Grow the box back over anything that plainly belongs to
+        # it — graphical rects mostly inside it, then small text blocks
+        # (tick labels, axis titles) mostly inside a slightly padded version.
+        # Captions and body paragraphs sit wholly outside, so they stay out.
+        def fraction_inside(r: fitz.Rect, box: fitz.Rect) -> float:
+            area = r.width * r.height
+            if area <= 0:
+                return 0.0
+            inter = fitz.Rect(r) & box
+            if inter.is_empty:
+                return 0.0
+            return (inter.width * inter.height) / area
+
+        for _ in range(2):
+            for r in graphical:
+                if fraction_inside(r, bbox) >= 0.5:
+                    bbox |= r
+
+        label_zone = fitz.Rect(bbox.x0 - 14, bbox.y0 - 14, bbox.x1 + 14, bbox.y1 + 14)
+        margin = 0.08 * ph  # running heads and page numbers live in here
+        for tb in text_blocks:
+            if tb.height > 0.25 * ph or tb.height <= 0:
+                continue  # a paragraph, not a label
+            centre_y = 0.5 * (tb.y0 + tb.y1)
+            if centre_y < margin or centre_y > ph - margin:
+                continue  # running head / folio, not part of the figure
+            if tb in caption_blocks:
+                continue  # handled below
+            if fraction_inside(tb, label_zone) >= 0.6:
+                bbox |= tb
+
+        # Captions get cut mid-line by whatever edge the box happens to land
+        # on, which looks worse than either including or excluding them
+        # cleanly. Pull the box back to the caption's edge so it's excluded
+        # outright — at card size the caption text is unreadable anyway.
+        centre_y = 0.5 * (bbox.y0 + bbox.y1)
+        for cb in caption_blocks:
+            if cb.y0 >= bbox.y1 or cb.y1 <= bbox.y0:
+                continue  # already outside
+            if cb.y0 > centre_y:            # caption below the figure
+                bbox.y1 = min(bbox.y1, cb.y0 - 6)
+            elif cb.y1 < centre_y:          # caption above (tables, mostly)
+                bbox.y0 = max(bbox.y0, cb.y1 + 6)
+
+        bbox &= page.rect
 
         # Reject results that are too small to be a real figure.
         if (bbox.width * bbox.height) < 0.05 * page_area:
@@ -393,152 +508,50 @@ def crop_whitespace(png_bytes: bytes) -> bytes:
     return out.getvalue()
 
 
-# --------------------------------------------------------------------------
-# GitHub Models
-# --------------------------------------------------------------------------
+def pick_figure_page(pdf_path: pathlib.Path,
+                     n_pages: int) -> tuple[int, tuple[float, float, float, float] | None]:
+    """Choose the page whose dominant figure covers the most of the page.
 
+    `figure_bbox_in_page` already isolates the dominant graphical region on a
+    page and returns None when there isn't one, so scoring every candidate
+    page by its bbox area fraction picks the figure page without a model in
+    the loop. Falls back to page 1 (page 0 is nearly always the title page)
+    when no page has a detectable figure.
+    """
+    best_idx = -1
+    best_score = 0.0
+    best_clip: tuple[float, float, float, float] | None = None
 
-def _gh_models_session(token: str) -> requests.Session:
-    s = requests.Session()
-    s.headers.update({
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-    })
-    return s
+    import fitz
 
+    with fitz.open(pdf_path) as doc:
+        page_areas = [
+            doc[i].rect.width * doc[i].rect.height
+            for i in range(min(n_pages, len(doc)))
+        ]
 
-def gh_models_chat(session: requests.Session, messages: list[dict[str, Any]],
-                   max_tokens: int = 600, retries: int = 6) -> str:
-    """Call GitHub Models chat completions, honouring Retry-After on 429s."""
-    body = {
-        "model": MODEL_NAME,
-        "messages": messages,
-        "temperature": 0.2,
-        "max_tokens": max_tokens,
-    }
-    for attempt in range(retries):
+    for idx, page_area in enumerate(page_areas):
+        if page_area <= 0:
+            continue
         try:
-            r = session.post(
-                f"{GH_MODELS_BASE}/chat/completions",
-                json=body,
-                timeout=120,
-            )
-        except requests.RequestException as e:
-            wait = min(60, 2 ** attempt)
-            log(f"  request error ({e}); sleeping {wait}s")
-            time.sleep(wait)
+            clip = figure_bbox_in_page(pdf_path, idx)
+        except Exception as e:
+            log(f"  figure bbox detection failed on page {idx}: {e}")
             continue
-
-        if r.status_code == 429:
-            # Free-tier limits are per-minute (TPM/RPM) and per-day. Honour
-            # whichever Retry-After-style header GitHub sends; cap the wait
-            # so a daily-quota response doesn't hang the workflow for hours.
-            ra = (
-                r.headers.get("Retry-After")
-                or r.headers.get("retry-after")
-                or r.headers.get("x-ratelimit-timeremaining")
-            )
-            try:
-                wait = int(float(ra)) if ra is not None else 0
-            except ValueError:
-                wait = 0
-            if wait <= 0:
-                wait = 20 * (attempt + 1)
-            wait = min(wait, MAX_RATELIMIT_WAIT)
-            try:
-                msg = r.json().get("error", {}).get("message", "")
-            except Exception:
-                msg = (r.text or "")[:200]
-            log(f"  rate-limited (attempt {attempt + 1}/{retries}); sleeping {wait}s — {msg}")
-            time.sleep(wait)
+        if clip is None:
             continue
+        x0, y0, x1, y1 = clip
+        score = ((x1 - x0) * (y1 - y0)) / page_area
+        # Slightly discount the title page: a big logo or masthead graphic
+        # there is rarely the paper's representative figure.
+        if idx == 0:
+            score *= 0.5
+        if score > best_score:
+            best_idx, best_score, best_clip = idx, score, clip
 
-        if 500 <= r.status_code < 600:
-            wait = min(60, 5 * (attempt + 1))
-            log(f"  server error {r.status_code}; sleeping {wait}s")
-            time.sleep(wait)
-            continue
-
-        if not r.ok:
-            try:
-                msg = r.json().get("error", {}).get("message", "")
-            except Exception:
-                msg = (r.text or "")[:200]
-            raise RuntimeError(f"GitHub Models {r.status_code}: {msg}")
-
-        # Be polite between successful calls so we don't immediately re-trip
-        # the per-minute TPM ceiling on the next request.
-        time.sleep(REQUEST_SPACING)
-        return r.json()["choices"][0]["message"]["content"].strip()
-
-    raise RuntimeError(f"GitHub Models still rate-limited after {retries} attempts")
-
-
-def pick_figure_page(session: requests.Session, page_pngs: list[bytes],
-                     title: str) -> int:
-    """Ask the vision model which page best represents the paper's lead figure."""
-    if not page_pngs:
-        return -1
-
-    # Build a multi-image content payload. Skip page 0 (typically text) but
-    # include it as a fallback option.
-    content: list[dict[str, Any]] = [{
-        "type": "text",
-        "text": (
-            f"Paper title: {title}\n"
-            "Below are thumbnails of pages from this paper, in order. "
-            "Pick the SINGLE page that contains the most visually compelling, "
-            "representative figure for use as a thumbnail on a research website. "
-            "Strongly prefer pages dominated by a plot, diagram, or image rather "
-            "than text. Reply with only an integer index (0-based)."
-        ),
-    }]
-    for png in page_pngs:
-        b64 = base64.b64encode(png).decode("ascii")
-        content.append({
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/png;base64,{b64}",
-                # detail=low fixes the per-image cost at ~85 input tokens,
-                # which is essential for staying under the free-tier TPM.
-                "detail": "low",
-            },
-        })
-
-    try:
-        reply = gh_models_chat(session, [{"role": "user", "content": content}], max_tokens=8)
-    except Exception as e:
-        log(f"  figure pick failed: {e}; falling back to page 1")
-        return 1 if len(page_pngs) > 1 else 0
-
-    m = re.search(r"\d+", reply)
-    if not m:
-        return 1 if len(page_pngs) > 1 else 0
-    idx = int(m.group(0))
-    if 0 <= idx < len(page_pngs):
-        return idx
-    return 1 if len(page_pngs) > 1 else 0
-
-
-def summarize_paper(session: requests.Session, title: str, abstract: str) -> str:
-    if not abstract:
-        return ""
-    prompt = (
-        "Summarize the following astrophysics paper abstract for a research-website "
-        "card. Two sentences max, plain English, focus on the result's significance. "
-        "No hype, no first person, no quotation marks.\n\n"
-        f"Title: {title}\n\nAbstract: {abstract}"
-    )
-    try:
-        return gh_models_chat(
-            session,
-            [{"role": "user", "content": prompt}],
-            max_tokens=200,
-        )
-    except Exception as e:
-        log(f"  summary failed: {e}")
-        return ""
+    if best_idx < 0:
+        return (1 if len(page_areas) > 1 else 0), None
+    return best_idx, best_clip
 
 
 # --------------------------------------------------------------------------
@@ -561,14 +574,37 @@ def load_existing() -> list[dict[str, Any]]:
         return []
 
 
+def load_cache() -> dict[str, dict[str, Any]]:
+    """Durable per-bibcode store of summaries and figure paths.
+
+    papers.yml only holds the papers currently on the front page, so a paper
+    that rotates out and later returns would otherwise need a fresh model
+    call (and got a blank card whenever that call failed). This file is
+    keyed by bibcode and never pruned.
+    """
+    if not CACHE_FILE.exists():
+        return {}
+    try:
+        data = yaml.safe_load(CACHE_FILE.read_text()) or {}
+        return data if isinstance(data, dict) else {}
+    except yaml.YAMLError:
+        return {}
+
+
+def save_cache(cache: dict[str, dict[str, Any]]) -> None:
+    CACHE_FILE.write_text(
+        "# Auto-generated by scripts/fetch_papers.py — do not edit by hand.\n"
+        "# Durable cache of model-generated summaries and figure paths, keyed\n"
+        "# by bibcode. Never pruned: entries outlive rotation out of papers.yml.\n"
+        + yaml.safe_dump(cache, sort_keys=True, allow_unicode=True, width=100)
+    )
+
+
 def main() -> int:
-    ads_token = os.environ.get("ADS_API_TOKEN")
-    gh_token = os.environ.get("GITHUB_TOKEN")
-    if not ads_token:
-        log("ADS_API_TOKEN is not set; skipping paper update.")
+    token = ads_token()
+    if not token:
+        log("No ADS token (set ADS_API_TOKEN or ~/.ads/dev_key); skipping paper update.")
         return 0
-    if not gh_token:
-        log("GITHUB_TOKEN is not set; will fetch metadata but skip summaries/figures.")
 
     cfg = site_config()
     library_id = os.environ.get("ADS_LIBRARY_ID") or cfg.get("ads_library_id")
@@ -576,8 +612,7 @@ def main() -> int:
         log("No ADS library id configured (`ads_library_id` in _config.yml).")
         return 1
 
-    ads = _ads_session(ads_token)
-    gh = _gh_models_session(gh_token) if gh_token else None
+    ads = _ads_session(token)
 
     log(f"Fetching library {library_id}…")
     bibcodes = fetch_library_bibcodes(ads, library_id)
@@ -621,22 +656,34 @@ def main() -> int:
             seen.add(cand["bibcode"])
 
     existing = {p.get("bibcode"): p for p in load_existing()}
+    cache = load_cache()
+    # Seed the cache from papers.yml so the first run after this change keeps
+    # the summaries already on the page.
+    for bib, prev in existing.items():
+        if not bib:
+            continue
+        entry = cache.setdefault(bib, {})
+        for key in ("summary", "figure"):
+            if prev.get(key) and not entry.get(key):
+                entry[key] = prev[key]
+
     out: list[dict[str, Any]] = []
 
     for doc in chosen:
         bib = doc["bibcode"]
-        title = (doc.get("title") or [""])[0]
+        title = strip_markup((doc.get("title") or [""])[0])
         log(f"\nProcessing {bib}: {title[:80]}")
 
-        prev = existing.get(bib, {})
-        figure_path = prev.get("figure")
-        summary = prev.get("summary", "")
+        cached = cache.get(bib, {})
+        figure_path = existing.get(bib, {}).get("figure") or cached.get("figure")
+        summary = existing.get(bib, {}).get("summary") or cached.get("summary") or ""
 
-        ax = arxiv_id(doc)
+        # Fall back to the cached id if ADS omits it this time round.
+        ax = arxiv_id(doc) or cached.get("arxiv")
         url = f"https://ui.adsabs.harvard.edu/abs/{urllib.parse.quote(bib)}"
 
-        # Figure: only re-run if we don't already have one.
-        if gh and not (figure_path and (ROOT / figure_path.lstrip("/")).exists()) and ax:
+        # Figure: only re-run if we don't already have one on disk.
+        if not (figure_path and (ROOT / figure_path.lstrip("/")).exists()) and ax:
             pdf_path = FIGURE_DIR / f"{bib.replace('/', '_')}.pdf"
             if download_arxiv_pdf(ax, pdf_path):
                 try:
@@ -645,14 +692,7 @@ def main() -> int:
                     log(f"  PDF render failed: {e}")
                     pages = []
                 if pages:
-                    idx = pick_figure_page(gh, pages, title)
-                    # Try to crop to just the figure region using PyMuPDF's
-                    # geometry; fall back to the full page if we can't tell.
-                    clip = None
-                    try:
-                        clip = figure_bbox_in_page(pdf_path, idx)
-                    except Exception as e:
-                        log(f"  figure bbox detection failed: {e}")
+                    idx, clip = pick_figure_page(pdf_path, len(pages))
                     log(f"  picked page {idx}" + (" (cropped to figure)" if clip else " (full page)"))
                     hi = render_pdf_page_hires(pdf_path, idx, clip=clip) or pages[idx]
                     try:
@@ -664,10 +704,22 @@ def main() -> int:
                     figure_path = "/" + img_path.relative_to(ROOT).as_posix()
                 pdf_path.unlink(missing_ok=True)
 
-        # Summary: only re-run if we don't already have one.
-        abstract = doc.get("abstract") or ""
-        if gh and not summary and abstract:
-            summary = summarize_paper(gh, title, abstract)
+        # Summaries are written separately by scripts/summaries.py, run from
+        # Claude Code — this pipeline never calls a model. Stash the abstract
+        # so that step doesn't need an ADS token of its own.
+        abstract = strip_markup(doc.get("abstract") or "")
+
+        # Record whatever we have so it survives rotating off the front page.
+        entry = cache.setdefault(bib, {})
+        entry["title"] = title
+        if ax:
+            entry["arxiv"] = ax
+        if abstract:
+            entry["abstract"] = abstract
+        if summary:
+            entry["summary"] = summary
+        if figure_path:
+            entry["figure"] = figure_path
 
         out.append({
             "bibcode": bib,
@@ -689,7 +741,13 @@ def main() -> int:
         "# Auto-generated by scripts/fetch_papers.py — do not edit by hand.\n"
         + yaml.safe_dump(out, sort_keys=False, allow_unicode=True, width=100)
     )
+    save_cache(cache)
+    missing = [p["bibcode"] for p in out if not p.get("summary")]
     log(f"\nWrote {DATA_FILE.relative_to(ROOT)} with {len(out)} entries.")
+    log(f"Wrote {CACHE_FILE.relative_to(ROOT)} with {len(cache)} cached entries.")
+    if missing:
+        log(f"Awaiting summaries ({len(missing)}): {', '.join(missing)}")
+        log("Run `scripts/summaries.py pending` from Claude Code to fill them in.")
     return 0
 
 

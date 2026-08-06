@@ -7,8 +7,26 @@
   url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1006..125D
   arxiv: https://arxiv.org/abs/2512.04156
   doi: 10.3847/1538-4357/ae7bed
-  summary: ''
+  summary: The dense central cusps that every dark matter halo is born with turn out to leave a measurable
+    imprint on the motions of stars in the smallest galaxies, and the observed velocity dispersions of
+    Tucana V and Triangulum II sit awkwardly with what warm dark matter would predict. Taken together,
+    the three faintest Milky Way satellites push the mass of a thermal-relic dark matter particle above
+    5.8 keV.
   figure: /assets/img/papers/2026ApJ..1006..125D.png
+- bibcode: 2026ApJ..1006L..65N
+  title: 'Warm, Not Fuzzy: Generalized Ultralight Dark Matter Limits from Milky Way Satellites'
+  authors_short: Nadler, Ethan O., A. Benson, et al.
+  year: 2026
+  venue: The Astrophysical Journal Letters
+  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1006L..65N
+  arxiv: https://arxiv.org/abs/2605.15371
+  doi: 10.3847/2041-8213/ae8b9f
+  summary: Ultralight dark matter produced with structure on small scales behaves less like the "fuzzy"
+    dark matter usually assumed and more like warm dark matter, with an additional wave-interference effect
+    that adds small-scale structure back in. Matching this against the observed population of Milky Way
+    satellite galaxies sets a new lower limit on the particle mass that depends on the scale at which
+    the field's structure peaks.
+  figure: /assets/img/papers/2026ApJ..1006L..65N.png
 - bibcode: 2026arXiv260612137B
   title: A Unified Halo Mass Function Across Dark Matter Models from High-Resolution Multi-Scale Simulations
   authors_short: Benson, Andrew J. et al.
@@ -22,20 +40,6 @@
     and ability to account for environmental influences make it essential for future dark matter studies
     and data analysis.
   figure: /assets/img/papers/2026arXiv260612137B.png
-- bibcode: 2026arXiv260605277G
-  title: The free-streaming length of dark matter from JWST observations of 28 strong gravitational lenses
-  authors_short: Gilman, D., A. Benson, et al.
-  year: 2026
-  venue: arXiv e-prints
-  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260605277G
-  arxiv: https://arxiv.org/abs/2606.05277
-  doi: 10.48550/arXiv.2606.05277
-  summary: This study uses observations from the James Webb Space Telescope to measure the properties
-    of dark matter halos in 28 strong gravitational lens systems, providing significant constraints on
-    the free-streaming length of dark matter. The results support the cold dark matter model by ruling
-    out deviations on large scales and establishing lower limits on the mass of thermal relic dark matter
-    particles.
-  figure: /assets/img/papers/2026arXiv260605277G.png
 - bibcode: 2026arXiv260610006C
   title: 'Mixed Dark Matter: Limits from the Milky Way Satellite Galaxies'
   authors_short: Crumrine, Wendy, A. Benson, et al.
@@ -50,24 +54,31 @@
     increases, the constraints on its properties weaken, highlighting the need for future surveys to refine
     these limits further.
   figure: /assets/img/papers/2026arXiv260610006C.png
-- bibcode: 2026arXiv260519323X
-  title: Correlation between baryonic process and galaxy assembly bias
-  authors_short: Xiao, Zilan, A. Benson, et al.
+- bibcode: 2026arXiv260605277G
+  title: The free-streaming length of dark matter from JWST observations of 28 strong gravitational lenses
+  authors_short: Gilman, D., A. Benson, et al.
   year: 2026
   venue: arXiv e-prints
-  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260519323X
-  arxiv: https://arxiv.org/abs/2605.19323
-  doi: 10.48550/arXiv.2605.19323
-  summary: ''
-  figure: /assets/img/papers/2026arXiv260519323X.png
-- bibcode: 2026ApJ..1003...12L
-  title: Connection between Galaxy Morphology and Dark-matter Halo Structure. II. Predicting Disk Structure
-    from Dark-matter Halo Properties
-  authors_short: Liang, Jinning, A. Benson, et al.
+  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260605277G
+  arxiv: https://arxiv.org/abs/2606.05277
+  doi: 10.48550/arXiv.2606.05277
+  summary: This study uses observations from the James Webb Space Telescope to measure the properties
+    of dark matter halos in 28 strong gravitational lens systems, providing significant constraints on
+    the free-streaming length of dark matter. The results support the cold dark matter model by ruling
+    out deviations on large scales and establishing lower limits on the mass of thermal relic dark matter
+    particles.
+  figure: /assets/img/papers/2026arXiv260605277G.png
+- bibcode: 2026PhRvD.113j3011M
+  title: Calibrating the self-interacting dark matter gravothermal catastrophe with N-body simulations
+  authors_short: Mace, Charlie, A. Benson, et al.
   year: 2026
-  venue: The Astrophysical Journal
-  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1003...12L
-  arxiv: https://arxiv.org/abs/2512.13822
-  doi: 10.3847/1538-4357/ae5821
-  summary: ''
-  figure: /assets/img/papers/2026ApJ..1003...12L.png
+  venue: Physical Review D
+  url: https://ui.adsabs.harvard.edu/abs/2026PhRvD.113j3011M
+  arxiv: https://arxiv.org/abs/2504.13004
+  doi: 10.1103/x3lh-xfx9
+  summary: Dark matter halos that interact with themselves eventually undergo a runaway collapse of their
+    inner regions, a process usually modelled by treating the dark matter as a heat-conducting fluid with
+    one free parameter that different studies have set differently. A suite of N-body simulations shows
+    that this parameter does not depend on halo mass, concentration, or interaction strength, allowing
+    fast and consistent predictions without running new simulations.
+  figure: /assets/img/papers/2026PhRvD.113j3011M.png

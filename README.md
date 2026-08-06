@@ -65,30 +65,68 @@ that member's `current_affiliation`.
 
 ### Recent-papers pipeline (`update-papers.yml`)
 
-Runs weekly. For each selected paper from the configured ADS library it:
+Runs weekly in GitHub Actions. For each selected paper from the configured ADS
+library it:
 
-1. Fetches metadata from NASA ADS.
-2. Downloads the arXiv PDF, renders the first ~12 pages.
-3. Asks a small vision-capable model on
-   [GitHub Models](https://docs.github.com/en/github-models) to pick the page
-   containing the most representative figure.
-4. Crops whitespace and saves the figure to `assets/img/papers/`.
-5. Asks the same model for a two-sentence plain-English summary.
-6. Writes the result to `_data/papers.yml` and commits it back to the repo.
+1. Fetches metadata from NASA ADS (title, authors, venue, DOI, abstract).
+2. Downloads the arXiv PDF and renders its first few pages.
+3. Picks the page whose dominant graphical region covers the most area, and
+   crops to that figure — see *How the figure is found* below.
+4. Saves the figure to `assets/img/papers/`.
+5. Writes the result to `_data/papers.yml` and commits it back to the repo.
 
-If a paper already has a figure on disk and a summary in the data file, the
-expensive steps are skipped — so re-runs are cheap.
+**No model is called here**, so the only secret it needs is the ADS token:
 
-#### Required secret
+| Secret | Purpose |
+| ------ | ------- |
+| `NASA_ADS_API_KEY` | NASA ADS API token ([generate one here](https://ui.adsabs.harvard.edu/user/settings/token)) |
 
-Create a repo secret named **`ADS_API_TOKEN`** with a NASA ADS API token
-([generate one here](https://ui.adsabs.harvard.edu/user/settings/token)). The
-default `GITHUB_TOKEN` is wired up for GitHub Models access via the
-`models: read` permission declared in the workflow.
+New papers land with `summary: ''`; the summaries are written separately (next
+section). Run it by hand from the **Actions** tab — *Update papers*, with an
+optional `limit` input.
 
-#### Manual run
+#### The durable cache
 
-From the **Actions** tab, run *Update papers* with an optional `limit` input.
+`_data/papers_cache.yml` holds each paper's summary, abstract, and figure path
+keyed by bibcode, and is **never pruned**. `papers.yml` only holds the six
+papers currently on the front page, so without this cache a paper that rotated
+out and later rotated back in would lose its summary and need it rewritten.
+That is exactly what used to produce blank cards.
+
+#### How the figure is found
+
+A figure page is identified from PDF geometry, with no model involved.
+`figure_bbox_in_page()` counts how many drawing paths cover each row of the
+page: a plot is hundreds of overlapping paths (axes, ticks, grid, data) stacked
+in one band, while the stray clip and background paths that PDFs are full of
+are lone rects that can span a whole column. The densest band is the figure;
+the box is then grown back over the figure's own axes and tick labels, and
+trimmed clear of running heads and `Figure N.` captions. Each page is scored by
+how much of it that figure covers, and the best-scoring page wins.
+
+### Paper summaries (`/refresh-summaries`)
+
+Summaries are written by Claude Code on the Claude subscription — there is no
+API key and no per-call billing anywhere in this pipeline.
+
+```bash
+python3 scripts/summaries.py pending    # what still needs a summary
+/refresh-summaries                      # in Claude Code: write and commit them
+```
+
+`scripts/summaries.py pending` lists front-page papers that have a cached
+abstract but no summary. `apply` writes summaries into both
+`_data/papers_cache.yml` and `_data/papers.yml`; `sync` re-copies cached
+summaries into `papers.yml` if the two drift apart.
+
+`scripts/refresh_summaries.sh` is the unattended entry point: it refuses to run
+on a dirty tree, pulls, exits immediately if nothing is pending, and otherwise
+invokes `/refresh-summaries`. Weekly, a few hours after the Action:
+
+```cron
+#Write summaries for new publication-page cards
+20 9 * * 0	"/home/abensonca/Work/Communication/Home Pages/abensonca.github.io/scripts/refresh_summaries.sh" > /home/abensonca/.refresh-summaries.log 2>&1
+```
 
 ### Affiliations pipeline (`update-affiliations.yml`)
 
@@ -115,7 +153,8 @@ To preview the auto-generation pipelines locally:
 
 ```bash
 pip install -r scripts/requirements.txt
-ADS_API_TOKEN=… GITHUB_TOKEN=… python scripts/fetch_papers.py
+python scripts/fetch_papers.py                  # reads ~/.ads/dev_key, or $ADS_API_TOKEN
+python scripts/summaries.py pending             # papers still needing a summary
 python scripts/fetch_affiliations.py --check    # dry run
 ```
 
