@@ -78,5 +78,9 @@
   url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1003...12L
   arxiv: https://arxiv.org/abs/2512.13822
   doi: 10.3847/1538-4357/ae5821
-  summary: ''
+  summary: The sizes and thicknesses of galactic disks in the TNG50 simulation can be predicted accurately
+    from the properties of their surrounding dark matter halos alone, with halo concentration, spin, and
+    recent growth mattering most, and disk thickness proving easier to predict than disk size. The apparent
+    link between disk size and the shape of the halo's density profile arises because the disk itself
+    reshapes the inner halo, rather than from any connection present when the halo first formed.
   figure: /assets/img/papers/2026ApJ..1003...12L.png
