@@ -92,6 +92,26 @@
     that this parameter does not depend on halo mass, concentration, or interaction strength, allowing
     fast and consistent predictions without running new simulations.
   title: Calibrating the self-interacting dark matter gravothermal catastrophe with N-body simulations
+2026PhRvL.137g1001N:
+  abstract: We explore the lowest mass limit that can be placed on the halo mass function in cold dark
+    matter (CDM) using 28 strong gravitational lenses. For this purpose, we study an extreme model in
+    which the halo mass function and mass-concentration relation follow CDM, with a sharp cutoff at some
+    mass scale, mlow. Lensing provides a unique window into this quantity as it does not depend on the
+    presence of baryons in dark matter halos and allows for the detection of low mass halos at cosmological
+    distances, both in the lens galaxies and along the line of sight. Our model incorporates the effects
+    of tidal stripping of subhalos, leading to the presence of many subhalos below a given model cutoff
+    scale. We place an upper limit on the low-mass cutoff of the halo mass function of mlow<108.3 M⊙ at
+    10∶1 odds using a prior for the normalization of the subhalo mass function from the semianalytic model
+    galacticus and mlow<108.2 M⊙ at 10∶1 odds using a prior from N-body simulations. These limits are
+    comparable to, or stronger than, existing constraints based on Milky Way satellite galaxies. Based
+    on these results, we forecast more than an order of magnitude improvement with a sample of 200 quadruply
+    imaged quasar lenses. This number represents a small subset of the thousands that are anticipated
+    to be discovered by Rubin, Euclid, and Roman. Furthermore, with this larger sample of lenses we expect
+    to directly constrain the normalization of the subhalo mass function, thereby eliminating a major
+    source of uncertainty in our current measurements.
+  arxiv: '2604.05237'
+  figure: /assets/img/papers/2026PhRvL.137g1001N.png
+  title: Measurement of the Minimum Cold Dark Matter Halo Mass with Strong Gravitational Lensing
 2026arXiv260519323X:
   figure: /assets/img/papers/2026arXiv260519323X.png
 2026arXiv260605277G:

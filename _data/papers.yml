@@ -14,6 +14,16 @@
     confidence, a limit that better velocity measurements or the discovery of more such galaxies could
     sharpen considerably.
   figure: /assets/img/papers/2026ApJ..1006..125D.png
+- bibcode: 2026PhRvL.137g1001N
+  title: Measurement of the Minimum Cold Dark Matter Halo Mass with Strong Gravitational Lensing
+  authors_short: Nierenberg, A. M., A. Benson, et al.
+  year: 2026
+  venue: Physical Review Letters
+  url: https://ui.adsabs.harvard.edu/abs/2026PhRvL.137g1001N
+  arxiv: https://arxiv.org/abs/2604.05237
+  doi: 10.1103/jnjt-1ghp
+  summary: ''
+  figure: /assets/img/papers/2026PhRvL.137g1001N.png
 - bibcode: 2026ApJ..1006L..65N
   title: 'Warm, Not Fuzzy: Generalized Ultralight Dark Matter Limits from Milky Way Satellites'
   authors_short: Nadler, Ethan O., A. Benson, et al.
@@ -28,6 +38,19 @@
     satellite galaxies sets a new lower limit on the particle mass that depends on the scale at which
     the field's structure peaks.
   figure: /assets/img/papers/2026ApJ..1006L..65N.png
+- bibcode: 2026arXiv260612137B
+  title: A Unified Halo Mass Function Across Dark Matter Models from High-Resolution Multi-Scale Simulations
+  authors_short: Benson, Andrew J. et al.
+  year: 2026
+  venue: arXiv e-prints
+  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260612137B
+  arxiv: https://arxiv.org/abs/2606.12137
+  doi: 10.48550/arXiv.2606.12137
+  summary: This research presents a highly precise model for the dark matter halo mass function, applicable
+    across various dark matter theories and effective over a vast range of halo masses. The model's accuracy
+    and ability to account for environmental influences make it essential for future dark matter studies
+    and data analysis.
+  figure: /assets/img/papers/2026arXiv260612137B.png
 - bibcode: 2026arXiv260605277G
   title: The free-streaming length of dark matter from JWST observations of 28 strong gravitational lenses
   authors_short: Gilman, D., A. Benson, et al.
@@ -56,30 +79,3 @@
     increases, the constraints on its properties weaken, highlighting the need for future surveys to refine
     these limits further.
   figure: /assets/img/papers/2026arXiv260610006C.png
-- bibcode: 2026arXiv260612137B
-  title: A Unified Halo Mass Function Across Dark Matter Models from High-Resolution Multi-Scale Simulations
-  authors_short: Benson, Andrew J. et al.
-  year: 2026
-  venue: arXiv e-prints
-  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260612137B
-  arxiv: https://arxiv.org/abs/2606.12137
-  doi: 10.48550/arXiv.2606.12137
-  summary: This research presents a highly precise model for the dark matter halo mass function, applicable
-    across various dark matter theories and effective over a vast range of halo masses. The model's accuracy
-    and ability to account for environmental influences make it essential for future dark matter studies
-    and data analysis.
-  figure: /assets/img/papers/2026arXiv260612137B.png
-- bibcode: 2026PhRvD.113j3011M
-  title: Calibrating the self-interacting dark matter gravothermal catastrophe with N-body simulations
-  authors_short: Mace, Charlie, A. Benson, et al.
-  year: 2026
-  venue: Physical Review D
-  url: https://ui.adsabs.harvard.edu/abs/2026PhRvD.113j3011M
-  arxiv: https://arxiv.org/abs/2504.13004
-  doi: 10.1103/x3lh-xfx9
-  summary: Dark matter halos that interact with themselves eventually undergo a runaway collapse of their
-    inner regions, a process usually modelled by treating the dark matter as a heat-conducting fluid with
-    one free parameter that different studies have set differently. A suite of N-body simulations shows
-    that this parameter does not depend on halo mass, concentration, or interaction strength, allowing
-    fast and consistent predictions without running new simulations.
-  figure: /assets/img/papers/2026PhRvD.113j3011M.png
