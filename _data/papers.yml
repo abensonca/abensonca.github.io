@@ -51,20 +51,6 @@
     and ability to account for environmental influences make it essential for future dark matter studies
     and data analysis.
   figure: /assets/img/papers/2026arXiv260612137B.png
-- bibcode: 2026arXiv260605277G
-  title: The free-streaming length of dark matter from JWST observations of 28 strong gravitational lenses
-  authors_short: Gilman, D., A. Benson, et al.
-  year: 2026
-  venue: arXiv e-prints
-  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260605277G
-  arxiv: https://arxiv.org/abs/2606.05277
-  doi: 10.48550/arXiv.2606.05277
-  summary: This study uses observations from the James Webb Space Telescope to measure the properties
-    of dark matter halos in 28 strong gravitational lens systems, providing significant constraints on
-    the free-streaming length of dark matter. The results support the cold dark matter model by ruling
-    out deviations on large scales and establishing lower limits on the mass of thermal relic dark matter
-    particles.
-  figure: /assets/img/papers/2026arXiv260605277G.png
 - bibcode: 2026arXiv260610006C
   title: 'Mixed Dark Matter: Limits from the Milky Way Satellite Galaxies'
   authors_short: Crumrine, Wendy, A. Benson, et al.
@@ -79,3 +65,17 @@
     increases, the constraints on its properties weaken, highlighting the need for future surveys to refine
     these limits further.
   figure: /assets/img/papers/2026arXiv260610006C.png
+- bibcode: 2026arXiv260605277G
+  title: The free-streaming length of dark matter from JWST observations of 28 strong gravitational lenses
+  authors_short: Gilman, D., A. Benson, et al.
+  year: 2026
+  venue: arXiv e-prints
+  url: https://ui.adsabs.harvard.edu/abs/2026arXiv260605277G
+  arxiv: https://arxiv.org/abs/2606.05277
+  doi: 10.48550/arXiv.2606.05277
+  summary: This study uses observations from the James Webb Space Telescope to measure the properties
+    of dark matter halos in 28 strong gravitational lens systems, providing significant constraints on
+    the free-streaming length of dark matter. The results support the cold dark matter model by ruling
+    out deviations on large scales and establishing lower limits on the mass of thermal relic dark matter
+    particles.
+  figure: /assets/img/papers/2026arXiv260605277G.png
