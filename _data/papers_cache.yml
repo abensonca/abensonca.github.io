@@ -92,6 +92,52 @@
     that this parameter does not depend on halo mass, concentration, or interaction strength, allowing
     fast and consistent predictions without running new simulations.
   title: Calibrating the self-interacting dark matter gravothermal catastrophe with N-body simulations
+2026PhRvD.114d3043K:
+  abstract: We present the full sample of measurements of the warm dust emission of 31 strongly-lensed,
+    multiply imaged quasars, observed with JWST MIRI multiband imaging, which we use to constrain the
+    particle properties of dark matter. The strongly lensed warm dust region of quasars is compact and
+    statistically sensitive to a population of dark matter halos down to masses of 106M⊙. The high spatial
+    resolution and infrared sensitivity of MIRI make it uniquely suited to measure multiply imaged warm
+    dust emission from quasars and thus to infer the properties of low-mass dark halos. In this work,
+    we present image fluxes as well as dark matter sensitive warm dust flux ratios inferred from spectral
+    energy distribution fitting. We then use these flux ratios to test for the presence of a warm dark
+    matter turnover in the halo mass function. We use a forward modeling pipeline which explores dark
+    matter parameters while also accounting for tidal stripping effects on subhalos, globular clusters,
+    and complex deflector macromodels with m=1,m=3, and m=4 elliptical multipole moments. Adopting a comparable
+    prior on the projected density of substructure to previous analyses, the data presented here provide
+    a factor of 2 improvement in sensitivity to a turnover in the halo mass function. Assuming subhalo
+    abundance predicted by the semianalytic model galacticus, we infer with a Bayes factor of 10∶1, a
+    half-mode mass mhm<107.8M⊙. If instead we use a prior from N-body simulations, we infer mhm<107.6M⊙.
+    This corresponds to a thermally produced dark matter mass of 5.6 (6.4) keV for the galacticus and
+    N-body priors, respectively. This is one of the strongest constraints to date on a turnover on the
+    halo mass function, and the flux ratios and inference methodology presented here can be used to test
+    a broad range of dark matter physics.
+  arxiv: '2511.07765'
+  figure: /assets/img/papers/2026PhRvD.114d3043K.png
+  title: JWST lensed quasar dark matter survey. III. Dark matter sensitive flux ratios and warm dark matter
+    constraint from the full sample
+2026PhRvD.114d3044G:
+  abstract: We present a measurement of the free-streaming length of dark matter (DM) and subhalo abundance
+    around 28 quadruple image strong lenses using observations from James webb space telescope mid-infrared
+    instrument presented in Paper III of this series. We improve on previous inferences on DM properties
+    from lensed quasars by simultaneously reconstructing extended lensed arcs with image positions and
+    relative magnifications (flux ratios). Our forward modeling framework generates full populations of
+    subhalos, line-of-sight halos, and globular clusters, uses an accurate model for subhalo tidal evolution,
+    and accounts for free-streaming effects on halo abundance and concentration. Modeling lensed arcs
+    leads to more-precise model-predicted flux ratios, breaking covariance between subhalo abundance and
+    the free-streaming scale parametrized by the half-mode mass mhm. Assuming subhalo abundance predicted
+    by the semianalytic model galacticus (N-body simulations), we infer (Bayes factor of 10∶1) mhm<107.4M⊙
+    (mhm<107.2M⊙), a 0.4 dex improvement relative to omitting lensed arcs. These bounds correspond to
+    lower limits on thermal relic DM particle masses of 6.5 and 7.4 keV, respectively. Conversely, assuming
+    DM is cold, we infer a projected mass in subhalos (106<m/M⊙<1010.7) of 1.7-1.2+2.6×107M⊙ kpc-2 at
+    95% confidence. This is consistent with galacticus predictions (0.9×107M⊙ kpc-2), but in mild tension
+    with recent N-body simulations (0.6×107M⊙ kpc-2). Our results are among the strongest bounds on warm
+    dark matter, and the most precise measurement of subhalo abundance around strong lenses. Further improvements
+    will follow from the large sample of lenses to be discovered by Euclid, Rubin, and Roman.
+  arxiv: '2511.07513'
+  figure: /assets/img/papers/2026PhRvD.114d3044G.png
+  title: JWST lensed quasar dark matter survey. IV. Stringent warm dark matter constraints from the joint
+    reconstruction of extended lensed arcs and quasar flux ratios
 2026PhRvL.137g1001N:
   abstract: We explore the lowest mass limit that can be placed on the halo mass function in cold dark
     matter (CDM) using 28 strong gravitational lenses. For this purpose, we study an extreme model in
@@ -112,6 +158,23 @@
   arxiv: '2604.05237'
   figure: /assets/img/papers/2026PhRvL.137g1001N.png
   title: Measurement of the Minimum Cold Dark Matter Halo Mass with Strong Gravitational Lensing
+2026PhRvL.137h1004G:
+  abstract: The formation of gravitationally bound overdensities of dark matter (DM), or halos, is a generic
+    prediction of theories with particle DM. We present a measurement of halo properties in 28 quadruple
+    image strong lens systems recently observed by JWST, and use these observations to constrain the free-streaming
+    length, λFS, of DM, a quantity that depends on the DM particle mass and formation mechanism. We improve
+    on previous lensing analyses by simultaneously reconstructing extended lensed arcs with image positions
+    and relative magnifications, enhancing sensitivity to perturbations by halos. Our analysis rules out
+    deviations from the predictions of cold dark matter (CDM) on scales above 107.2M⊙ and 107.4M⊙ for
+    subhalo abundance predicted by cosmological N-body simulations and semianalytic models, respectively.
+    These bounds correspond to upper limits λFS<6.0 kpc and λFS<7.0 kpc, and lower limits on the mass
+    of a spin─1/2 thermal relic DM particle mtherm>7.4 keV and mtherm>6.5 keV. Conversely, assuming a
+    negligible free-streaming length, as predicted by CDM, we measure a projected mass in subhalos around
+    elliptical galaxies 1.7-1.2+2.6×107 M⊙ kpc-2 at 95% confidence. These inferences confirm key predictions
+    of the CDM paradigm.
+  arxiv: '2606.05277'
+  figure: /assets/img/papers/2026PhRvL.137h1004G.png
+  title: Free-Streaming Length of Dark Matter from JWST Observations of 28 Strong Gravitational Lenses
 2026arXiv260519323X:
   figure: /assets/img/papers/2026arXiv260519323X.png
 2026arXiv260605277G:
