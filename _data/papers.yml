@@ -7,7 +7,11 @@
   url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1008..168X
   arxiv: https://arxiv.org/abs/2605.19323
   doi: 10.3847/1538-4357/ae9876
-  summary: ''
+  summary: For galaxies picked by their mass in stars, the extra clustering that depends on more than
+    the mass of their dark matter halos tracks most closely how gas cools and how stars blow gas back
+    out, regardless of how common the galaxies are. For galaxies picked by how fast they form stars, the
+    most closely linked process shifts from star formation itself to gas cooling as the sample includes
+    more common galaxies.
   figure: /assets/img/papers/2026ApJ..1008..168X.png
 - bibcode: 2026ApJ..1006L..65N
   title: 'Warm, Not Fuzzy: Generalized Ultralight Dark Matter Limits from Milky Way Satellites'
