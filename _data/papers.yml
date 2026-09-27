@@ -24,34 +24,6 @@
   doi: 10.48550/arXiv.2609.10680
   summary: ''
   figure: /assets/img/papers/2026arXiv260910680R.png
-- bibcode: 2026PhRvL.137h1004G
-  title: Free-Streaming Length of Dark Matter from JWST Observations of 28 Strong Gravitational Lenses
-  authors_short: Gilman, D., A. Benson, et al.
-  year: 2026
-  venue: Physical Review Letters
-  url: https://ui.adsabs.harvard.edu/abs/2026PhRvL.137h1004G
-  arxiv: https://arxiv.org/abs/2606.05277
-  doi: 10.1103/qckh-cqrd
-  summary: The pattern of distortions in 28 quadruply imaged quasars observed by JWST shows that dark
-    matter still clumps on scales below about 10^7 solar masses, limiting the distance its particles stream
-    before structure forms to under 6 to 7 kpc and requiring a thermal relic particle heavier than about
-    7 keV. Assuming dark matter is cold instead, the mass held in small clumps around elliptical lens
-    galaxies is measured directly, confirming a central prediction of the standard picture.
-  figure: /assets/img/papers/2026PhRvL.137h1004G.png
-- bibcode: 2026ApJ..1006L..65N
-  title: 'Warm, Not Fuzzy: Generalized Ultralight Dark Matter Limits from Milky Way Satellites'
-  authors_short: Nadler, Ethan O., A. Benson, et al.
-  year: 2026
-  venue: The Astrophysical Journal Letters
-  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1006L..65N
-  arxiv: https://arxiv.org/abs/2605.15371
-  doi: 10.3847/2041-8213/ae8b9f
-  summary: Ultralight dark matter produced with structure on small scales behaves less like the "fuzzy"
-    dark matter usually assumed and more like warm dark matter, with an additional wave-interference effect
-    that adds small-scale structure back in. Matching this against the observed population of Milky Way
-    satellite galaxies sets a new lower limit on the particle mass that depends on the scale at which
-    the field's structure peaks.
-  figure: /assets/img/papers/2026ApJ..1006L..65N.png
 - bibcode: 2026ApJ..1006..125D
   title: Testing Warm Dark Matter with Kinematics of the Smallest Galaxies
   authors_short: Delos, M. Sten, A. Benson, et al.
@@ -81,3 +53,31 @@
     and show no sign of one down to about 10^7.8 solar masses. That implies dark matter particles produced
     thermally in the early universe must be heavier than roughly 6 keV.
   figure: /assets/img/papers/2026PhRvD.114d3043K.png
+- bibcode: 2026PhRvL.137h1004G
+  title: Free-Streaming Length of Dark Matter from JWST Observations of 28 Strong Gravitational Lenses
+  authors_short: Gilman, D., A. Benson, et al.
+  year: 2026
+  venue: Physical Review Letters
+  url: https://ui.adsabs.harvard.edu/abs/2026PhRvL.137h1004G
+  arxiv: https://arxiv.org/abs/2606.05277
+  doi: 10.1103/qckh-cqrd
+  summary: The pattern of distortions in 28 quadruply imaged quasars observed by JWST shows that dark
+    matter still clumps on scales below about 10^7 solar masses, limiting the distance its particles stream
+    before structure forms to under 6 to 7 kpc and requiring a thermal relic particle heavier than about
+    7 keV. Assuming dark matter is cold instead, the mass held in small clumps around elliptical lens
+    galaxies is measured directly, confirming a central prediction of the standard picture.
+  figure: /assets/img/papers/2026PhRvL.137h1004G.png
+- bibcode: 2026PhRvL.137g1001N
+  title: Measurement of the Minimum Cold Dark Matter Halo Mass with Strong Gravitational Lensing
+  authors_short: Nierenberg, A. M., A. Benson, et al.
+  year: 2026
+  venue: Physical Review Letters
+  url: https://ui.adsabs.harvard.edu/abs/2026PhRvL.137g1001N
+  arxiv: https://arxiv.org/abs/2604.05237
+  doi: 10.1103/jnjt-1ghp
+  summary: Even if dark matter is perfectly cold, 28 strong gravitational lenses require that halos keep
+    forming down to at least 10^8.3 solar masses, a limit comparable to or stronger than the one from
+    the Milky Way's satellite galaxies and one that does not depend on those halos containing any stars.
+    A sample of 200 such lenses, a small fraction of what Rubin, Euclid, and Roman are expected to find,
+    would push the limit more than a factor of ten lower.
+  figure: /assets/img/papers/2026PhRvL.137g1001N.png
