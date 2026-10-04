@@ -91,6 +91,64 @@
     most closely linked process shifts from star formation itself to gas cooling as the sample includes
     more common galaxies.
   title: Correlation between Baryonic Process and Galaxy Assembly Bias
+2026ApJS..286...49L:
+  abstract: Understanding how galaxy populations emerge and evolve from the growth of dark-matter structures
+    is a central challenge in galaxy formation theory. Semianalytic models (SAMs) provide an efficient
+    framework to address this problem, but exploring large ensembles of merger trees across broad parameter
+    spaces remains computationally demanding. We develop a conditional graph-neural-network surrogate
+    model that combines merger-tree information with SAM parameters to predict galaxy properties across
+    cosmic time. Using merger trees of dark-matter halos from the Uchuu simulation and the GALACTICUS
+    SAM, the model predicts stellar mass, luminosity, angular momentum, gas metal mass, and specific star
+    formation rate across the wide redshift range of 0 <= z ≲ 5. For instance, the model can predict stellar
+    mass at 0 <= z ≲ 3 with a scatter of 0.19--0.28 dex and coefficient of determination R2 of 0.946--0.973
+    (R2 close to 1 indicates prediction closely matching the truth). The results show that a single graph-based
+    model can reproduce these galaxy properties with good accuracy over multiple SAM realizations, merger
+    trees, and redshifts. This catalog-level model provides a practical route for accelerating SAM-based
+    studies of galaxy formation to enable a more detailed investigation of the model parameter space.
+    The inference code, trained models, and example data products are publicly available on Zenodo at
+    doi:10.5281/zenodo.21367843.
+  arxiv: '2604.23147'
+  figure: /assets/img/papers/2026ApJS..286...49L.png
+  title: A Graph-based Neural-network Surrogate Model for an Accelerating Semianalytical Model of Galaxy
+    Formation and Evolution
+2026OJAp....970875W:
+  abstract: 'The satellite system of Centaurus A presents a curious cosmological puzzle: while the global
+    population is consistent with theoretical expectations, its inner regions (d<150 kpc) exhibit a deficit
+    of luminous satellite galaxies. Using the Galacticus semi-analytic model applied to high-resolution
+    N-body merger trees, we investigate potential quenching mechanisms to explain this trend. Our fiducial
+    models, calibrated to the Milky Way, reproduce the overall Cen A population but overpredict the number
+    of bright inner-halo satellites by a factor of 4 +- 1 at Mv < -15.8. We find that this is not due
+    to statistical variance. Instead, the spatial coincidence of this deficiency with Cen A''s massive,
+    kiloparsec-scale radio lobes suggests a powerful environmental driver. We explore a range of physical
+    scenarios, including enhanced tidal disruption, reionization quenching, and suppressed accretion into
+    halos from the surrounding intergalactic medium. Our results indicate that AGN-driven thermal feedback
+    at z < 5 can significantly suppress star formation in satellites, effectively truncating the bright
+    end of the inner luminosity function. Our work suggests that the ``Curious Case of Centaurus A''''
+    may provide evidence of AGN feedback within the host galaxy that regulates the survival and evolution
+    of its dwarf galaxy satellites.'
+  arxiv: '2602.11270'
+  figure: /assets/img/papers/2026OJAp....970875W.png
+  title: 'The Curious Case of Centaurus A: On the Subject of the Quenched satellites'
+2026OJAp....970877B:
+  abstract: We measure the dark matter halo mass function, with backsplash halos removed, from a wide
+    range of cosmological-box and zoom-in simulations. These include the MultiDark Planck boxes, along
+    with a suite of zoom-in simulations of Group, Milky Way, and LMC-mass halos. The Milky Way simulations
+    include both CDM and non-CDM initial conditions. Using these measurements, we calibrate the parameters
+    of flexible fitting functions for the halo mass function and the window function, along with parameterized
+    models for various systematics, including finite box size effects, halo isolation criteria, halo detection
+    efficiency, and contamination by artificial halos (objects forming from particle noise in the initial
+    conditions). We show that this model shows remarkable consistency with N-body simulations over a broad
+    range of redshifts, and ten orders of magnitude in halo mass ( 106M⊙ to 1016M⊙). Our model typically
+    maintains a high precision of 12% and captures complex behaviors, including small-scale cut-offs,
+    oscillations, and enhancements. In specific mass intervals for certain power spectra, we see larger
+    deviations of 40-50%. Furthermore, when integrated with a simple model for environmental dependence,
+    this fitting function provides a robust description of how environmental density influences the halo
+    mass function. This precision model captures a wide variety of dark matter paradigms (including thermal
+    relics, axions, and models with dark-sector interactions), is accurate for halo masses down to 107M⊙,
+    and is a critical ingredient for model-independent dark-matter inference from forthcoming data.
+  arxiv: '2606.12137'
+  figure: /assets/img/papers/2026OJAp....970877B.png
+  title: A Unified Halo Mass Function Across Dark Matter Models from High-Resolution Multi-Scale Simulations
 2026PhRvD.113j3011M:
   abstract: Self-interacting dark matter (SIDM) theories predict that dark matter halos experience core-collapse
     in late-stage evolution, a process where the halo's inner region rapidly increases in density and
