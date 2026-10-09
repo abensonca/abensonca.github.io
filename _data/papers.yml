@@ -8,7 +8,12 @@
   url: https://ui.adsabs.harvard.edu/abs/2026ApJS..286...49L
   arxiv: https://arxiv.org/abs/2604.23147
   doi: 10.3847/1538-4365/ae9a75
-  summary: ''
+  summary: A neural network that works directly on the branching histories of dark matter halos reproduces
+    the galaxy properties predicted by a full semi-analytic model — stellar mass, luminosity, rotation,
+    gas metal content, and star formation rate — over the first twelve billion years of cosmic time, matching
+    stellar masses to within 0.19 to 0.28 dex. A single such surrogate holds up across different model
+    parameter choices and halo histories, offering a fast stand-in when exploring the parameter space
+    of galaxy formation models.
   figure: /assets/img/papers/2026ApJS..286...49L.png
 - bibcode: 2026ApJ..1008..168X
   title: Correlation between Baryonic Process and Galaxy Assembly Bias
@@ -32,7 +37,11 @@
   url: https://ui.adsabs.harvard.edu/abs/2026OJAp....970877B
   arxiv: https://arxiv.org/abs/2606.12137
   doi: 10.33232/001c.170877
-  summary: ''
+  summary: A single fitting formula, calibrated against both large cosmological volumes and high-resolution
+    zoom-in simulations, reproduces the abundance of dark matter halos to about 12% over ten orders of
+    magnitude in mass and across dark matter models including thermal relics, axions, and dark-sector
+    interactions, with departures of 40 to 50% in a few mass ranges. Extended with a simple treatment
+    of surroundings, it also captures how the local density of the universe shifts the number of halos.
   figure: /assets/img/papers/2026OJAp....970877B.png
 - bibcode: 2026arXiv260910680R
   title: Emulator-Assisted Calibration of a Semi-Analytic Galaxy Formation Model for the Roman Galaxy
@@ -43,7 +52,12 @@
   url: https://ui.adsabs.harvard.edu/abs/2026arXiv260910680R
   arxiv: https://arxiv.org/abs/2609.10680
   doi: 10.48550/arXiv.2609.10680
-  summary: ''
+  summary: Fast statistical stand-ins for the Galacticus galaxy formation model make it practical to calibrate
+    it against several sets of observations at once — galaxy masses, sizes, star formation rates, metallicities,
+    central black hole masses, and hydrogen line emission — which breaks degeneracies that fits to any
+    single dataset leave unresolved and exposes where observations pull in different directions. The calibrated
+    model reproduces the abundance and evolution of hydrogen-line-emitting galaxies, making it suitable
+    for building mock catalogues for the Roman Galaxy Redshift Survey.
   figure: /assets/img/papers/2026arXiv260910680R.png
 - bibcode: 2026OJAp....970875W
   title: 'The Curious Case of Centaurus A: On the Subject of the Quenched satellites'
@@ -53,7 +67,11 @@
   url: https://ui.adsabs.harvard.edu/abs/2026OJAp....970875W
   arxiv: https://arxiv.org/abs/2602.11270
   doi: 10.33232/001c.170875
-  summary: ''
+  summary: Models calibrated to the Milky Way overpredict the number of bright satellite galaxies within
+    150 kpc of Centaurus A by a factor of four, and chance alone cannot account for the shortfall. The
+    missing satellites occupy the same region as Centaurus A's kiloparsec-scale radio lobes, and heating
+    driven by the host's central black hole can suppress star formation in them enough to explain the
+    deficit.
   figure: /assets/img/papers/2026OJAp....970875W.png
 - bibcode: 2026PhRvD.114d3043K
   title: JWST lensed quasar dark matter survey. III. Dark matter sensitive flux ratios and warm dark matter
