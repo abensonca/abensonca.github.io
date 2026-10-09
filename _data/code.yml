@@ -35,3 +35,19 @@
   url: https://github.com/galacticusorg/astrosylva
   docs: https://astrosylva.readthedocs.io
   image: /assets/img/brownian_bridge.png
+
+- name: dust-compendium
+  description: >
+    Dust attenuation tables for simple galactic geometries, computed by running
+    the Hyperion Monte Carlo radiative transfer code over a grid of galaxy
+    models. Tabulates the fraction of starlight escaping a galaxy as a function
+    of wavelength, inclination, the optical depth of each dusty component, and
+    the component sizes; Galacticus reads the result directly. Replaces the
+    scripts behind Benson (2018), and reproduces the Ferrara et al. (1999)
+    atlas to within its published precision.
+  language: Python
+  role: Lead developer
+  url: https://github.com/galacticusorg/dust-compendium
+  docs: https://dust-compendium.readthedocs.io
+  paper: https://ui.adsabs.harvard.edu/abs/2018RNAAS...2..188B
+  image: /assets/img/extinction_curves.png
