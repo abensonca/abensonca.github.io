@@ -15,20 +15,6 @@
     parameter choices and halo histories, offering a fast stand-in when exploring the parameter space
     of galaxy formation models.
   figure: /assets/img/papers/2026ApJS..286...49L.png
-- bibcode: 2026ApJ..1008..168X
-  title: Correlation between Baryonic Process and Galaxy Assembly Bias
-  authors_short: Xiao, Zilan, A. Benson, et al.
-  year: 2026
-  venue: The Astrophysical Journal
-  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1008..168X
-  arxiv: https://arxiv.org/abs/2605.19323
-  doi: 10.3847/1538-4357/ae9876
-  summary: For galaxies picked by their mass in stars, the extra clustering that depends on more than
-    the mass of their dark matter halos tracks most closely how gas cools and how stars blow gas back
-    out, regardless of how common the galaxies are. For galaxies picked by how fast they form stars, the
-    most closely linked process shifts from star formation itself to gas cooling as the sample includes
-    more common galaxies.
-  figure: /assets/img/papers/2026ApJ..1008..168X.png
 - bibcode: 2026arXiv260910680R
   title: Emulator-Assisted Calibration of a Semi-Analytic Galaxy Formation Model for the Roman Galaxy
     Redshift Survey
@@ -45,6 +31,20 @@
     model reproduces the abundance and evolution of hydrogen-line-emitting galaxies, making it suitable
     for building mock catalogues for the Roman Galaxy Redshift Survey.
   figure: /assets/img/papers/2026arXiv260910680R.png
+- bibcode: 2026ApJ..1008..168X
+  title: Correlation between Baryonic Process and Galaxy Assembly Bias
+  authors_short: Xiao, Zilan, A. Benson, et al.
+  year: 2026
+  venue: The Astrophysical Journal
+  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1008..168X
+  arxiv: https://arxiv.org/abs/2605.19323
+  doi: 10.3847/1538-4357/ae9876
+  summary: For galaxies picked by their mass in stars, the extra clustering that depends on more than
+    the mass of their dark matter halos tracks most closely how gas cools and how stars blow gas back
+    out, regardless of how common the galaxies are. For galaxies picked by how fast they form stars, the
+    most closely linked process shifts from star formation itself to gas cooling as the sample includes
+    more common galaxies.
+  figure: /assets/img/papers/2026ApJ..1008..168X.png
 - bibcode: 2026OJAp....970875W
   title: 'The Curious Case of Centaurus A: On the Subject of the Quenched satellites'
   authors_short: Weerasooriya, Sachi, A. Benson, et al.
@@ -73,17 +73,18 @@
     interactions, with departures of 40 to 50% in a few mass ranges. Extended with a simple treatment
     of surroundings, it also captures how the local density of the universe shifts the number of halos.
   figure: /assets/img/papers/2026OJAp....970877B.png
-- bibcode: 2026PhRvL.137h1004G
-  title: Free-Streaming Length of Dark Matter from JWST Observations of 28 Strong Gravitational Lenses
-  authors_short: Gilman, D., A. Benson, et al.
+- bibcode: 2026ApJ..1006..125D
+  title: Testing Warm Dark Matter with Kinematics of the Smallest Galaxies
+  authors_short: Delos, M. Sten, A. Benson, et al.
   year: 2026
-  venue: Physical Review Letters
-  url: https://ui.adsabs.harvard.edu/abs/2026PhRvL.137h1004G
-  arxiv: https://arxiv.org/abs/2606.05277
-  doi: 10.1103/qckh-cqrd
-  summary: The pattern of distortions in 28 quadruply imaged quasars observed by JWST shows that dark
-    matter still clumps on scales below about 10^7 solar masses, limiting the distance its particles stream
-    before structure forms to under 6 to 7 kpc and requiring a thermal relic particle heavier than about
-    7 keV. Assuming dark matter is cold instead, the mass held in small clumps around elliptical lens
-    galaxies is measured directly, confirming a central prediction of the standard picture.
-  figure: /assets/img/papers/2026PhRvL.137h1004G.png
+  venue: The Astrophysical Journal
+  url: https://ui.adsabs.harvard.edu/abs/2026ApJ..1006..125D
+  arxiv: https://arxiv.org/abs/2512.04156
+  doi: 10.3847/1538-4357/ae7bed
+  summary: Every dark matter halo forms with a dense spike at its center, and if dark matter is "warm"
+    enough to erase small-scale structure those spikes are heavy enough to speed up the stars in the smallest
+    galaxies — yet the stars in Tucana V and Triangulum II move far too slowly to match. Taken together,
+    the three faintest Milky Way satellites rule out dark matter particles lighter than 5.8 keV at 95%
+    confidence, a limit that better velocity measurements or the discovery of more such galaxies could
+    sharpen considerably.
+  figure: /assets/img/papers/2026ApJ..1006..125D.png
