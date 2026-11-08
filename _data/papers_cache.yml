@@ -392,3 +392,76 @@
     for building mock catalogues for the Roman Galaxy Redshift Survey.
   title: Emulator-Assisted Calibration of a Semi-Analytic Galaxy Formation Model for the Roman Galaxy
     Redshift Survey
+2026arXiv261035945W:
+  abstract: SIRMOS is a mission concept for a future NASA Astrophysics Explorer opportunity that aims
+    to revolutionize our understanding of the universe by mapping the large-scale structure of galaxies
+    in unprecedented breadth and detail to explore cosmic origins and evolution. Specifically, the primary
+    science goals of SIRMOS are to discover how cosmic inflation seeded large-scale structure, reveal
+    the nature of the accelerating expansion of the universe, and measure the sum of neutrino masses to
+    exceptionally high precision. Its secondary science goals include determining how environment shapes
+    galaxy evolution at cosmic noon and beyond, and probing the Milky Way's dust-enshrouded regions, reaching
+    the far side of our Galaxy. To accomplish its transformative science goals, SIRMOS executes a 3-year
+    cosmology survey over the Euclid footprint of ~14,000 deg$^2$, obtaining slit spectra for ~100 million
+    galaxies at 1<z<4. SIRMOS is the first space mission designed specifically to leverage Euclid's wide
+    near-infrared (IR) imaging survey for target selection and employs a digital micro-mirror device (DMD)
+    to acquire up to 4,000 simultaneous spectra over a wide 0.9 deg$^2$ field of view. The instrument's
+    excellent spectral resolution of $R=1300$ and continuous wavelength coverage from 1.25--2.5 $μ$m capture
+    the redshifts of distant galaxies with no gaps, reducing systematic biases to achieve ground-breaking
+    science.
+  arxiv: '2610.35945'
+  figure: /assets/img/papers/2026arXiv261035945W.png
+  title: 'The SIRMOS mission concept: a space-based near-IR spectroscopic survey of 100 million galaxies
+    in the Euclid Wide Survey footprint'
+2026arXiv261037763S:
+  abstract: Recent observations from the from Spectrum Roentgen Gamma (SRG)/eROSITA all-sky survey data
+    have helped to illuminate the hot circumgalactic medium (CGM) around galaxies at Milky Way-masses
+    and above. In our study, we explore the hot X-ray emitting (T \textgreater 10$^6$ K) component of
+    the CGM in over 750 galaxies from the Romulus25 cosmological simulation (Tremmel et al. 2017) between
+    10.0 < log(M$_*/M_{\odot}$) < 11.5. We forward-model soft X-ray [0.5 - 2.0] keV observations of our
+    simulated galaxies using pyXSIM and SIXTE to measure the X-ray surface brightness (SB) profiles of
+    the hot CGM. We then compare the average X-ray surface brightness profiles of six stellar-mass selected
+    sub-samples to compare to the observational results from Chadayammuri et al. (2022a) and Zhang et
+    al. 2024a. Broadly, we find that our stacked SB profiles are too bright compared to observations from
+    Chadayammuri et al. (2022a) and Zhang et al.(2024a) particularly in the inner CGM. Additionally, we
+    calculate the X-ray luminosity (L$_χ$) of the hot CGM for each galaxy and compare the average L$_χ$
+    across stellar mass to observations from Zhang et al. (2024b) as well as measurements from the EAGLE,
+    TNG, SIMBA simulations. Across stellar mass, the average L$_χ$ of galaxies from Romulus25 are brighter
+    than observations except at the lower, Milky Way-mass end where we are in relative agreement with
+    both observations and most other simulations. We also consider a zero-metallicity emission model,
+    because Romulus25 does not have metal-line cooling, finding the average L$_χ$ decreases by nearly
+    an order-of-magnitude, which better matches observations particularly in the Milky Way-mass regime.
+  arxiv: '2610.37763'
+  figure: /assets/img/papers/2026arXiv261037763S.png
+  title: 'Hot off the Stacks: X-rays in Romulus25, Part I - Comparisons to Observations from eRosita'
+2026arXiv261037769S:
+  abstract: 'Characterizing the hot (T ~ 10$^{6}$ K) circumgalactic medium (CGM) around Milky Way-mass
+    (MW-mass) galaxies is critical to a full understanding of galaxy evolution. In this second paper of
+    the "X-rays in Romulus25" series, we unpack the specific physical processes giving rise to the presence
+    of hot X-ray emitting gas in the halos of galaxies from the Romulus25 (R25) simulation, focusing on
+    L$_{*}$ galaxies. We determine that a strong correlation appears between the mass of hot CGM gas,
+    M$_{gas, T > 10^{5.5} K}$, and the X-ray emissivity, $∊_χ$, measured in the first paper of this series,
+    (Sanchez et al. 2026a, submitted). There is also a secondary correlation between M$_{gas, T > 10^{5.5}
+    K}$ and $∊_χ$ with the average metallicity of the hot CGM gas, $\bar{Z}_{gas, T > 10^{5.5} K}$. We
+    use the well-studied PIONEER simulations from Sanchez et al. (2019), a set of zoom-in MW-mass galaxies
+    run with the genetic modification technique of Roth et al. (2016) and the same physics as R25, to
+    interpret these correlations. We determine that the presence of hot X-ray emitting gas is determined
+    by two key processes: 1) the quantity of hot gas mass in the CGM, M$_{gas, T > 10^{5.5} K}$, is set
+    by the combined total energy injection of $both$ stellar and AGN feedback, and 2) together the average
+    temperature and metallicity of the hot CGM changes the soft X-ray spectrum of the gas resulting in
+    brighter metal-rich CGM and dimmer metal-poor CGM for the same quantity of M$_{gas, T > 10^{5.5} K}$.
+    These results indicate, for the first time, that metal-rich gas halos may bias X-ray observations
+    of MW-mass galaxies.'
+  arxiv: '2610.37769'
+  figure: /assets/img/papers/2026arXiv261037769S.png
+  title: 'Extra! Extra! X-ray Emission!: X-rays in Romulus25, Part II - Physical Drivers of X-ray Emission
+    in the CGM'
+2026ascl.soft09004A:
+  abstract: DiffstarPop generates Monte Carlo realizations of galaxy star-formation-history populations
+    conditioned on halo mass-accretion histories described by Diffmah (ascl:2302.025). It samples Diffstar
+    (ascl:2302.012) parameters and produces star-formation histories for main-sequence and quenched outcomes,
+    together with each galaxy's quenching fraction and a Monte Carlo quenching classification. The package
+    treats central and satellite halos separately using halo mass, infall mass ratio, host-halo mass at
+    infall, and time since infall. DiffstarPop provides default parameters and parameter sets fitted to
+    IllustrisTNG, Galacticus, and UniverseMachine simulations, including sets for in-situ and in-plus-ex-situ
+    star-formation histories.
+  title: 'DiffstarPop: Population modeling of galaxy star-formation histories'
