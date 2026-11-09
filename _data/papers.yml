@@ -23,7 +23,11 @@
   url: https://ui.adsabs.harvard.edu/abs/2026arXiv261037763S
   arxiv: https://arxiv.org/abs/2610.37763
   doi: 10.48550/arXiv.2610.37763
-  summary: ''
+  summary: Galaxies in the Romulus25 simulation are surrounded by hot gas that shines too brightly in
+    X-rays compared with eROSITA all-sky survey measurements, especially close to each galaxy, although
+    the match is reasonable at the mass of the Milky Way. Treating the gas as free of heavy elements,
+    in keeping with the simulation's lack of cooling by those elements, cuts the X-ray output nearly tenfold
+    and brings it closer to the observations.
   figure: /assets/img/papers/2026arXiv261037763S.png
 - bibcode: 2026arXiv261037769S
   title: 'Extra! Extra! X-ray Emission!: X-rays in Romulus25, Part II - Physical Drivers of X-ray Emission
@@ -34,7 +38,11 @@
   url: https://ui.adsabs.harvard.edu/abs/2026arXiv261037769S
   arxiv: https://arxiv.org/abs/2610.37769
   doi: 10.48550/arXiv.2610.37769
-  summary: ''
+  summary: The amount of hot gas around Milky Way-mass galaxies in the Romulus25 simulation is set by
+    the combined energy released by stars and by central black holes, while the temperature and heavy-element
+    content of that gas determine how brightly it shines in X-rays. Gas rich in heavy elements appears
+    brighter for the same mass, which means X-ray observations of Milky Way-mass galaxies may be biased
+    toward such halos.
   figure: /assets/img/papers/2026arXiv261037769S.png
 - bibcode: 2026arXiv261035945W
   title: 'The SIRMOS mission concept: a space-based near-IR spectroscopic survey of 100 million galaxies
@@ -45,7 +53,11 @@
   url: https://ui.adsabs.harvard.edu/abs/2026arXiv261035945W
   arxiv: https://arxiv.org/abs/2610.35945
   doi: 10.48550/arXiv.2610.35945
-  summary: ''
+  summary: A proposed NASA space telescope called SIRMOS could record spectra of about 100 million distant
+    galaxies in three years, using images from the Euclid mission to pick targets and an array of tiny
+    movable mirrors to observe up to 4,000 at once. The resulting map of cosmic structure is designed
+    to test how inflation seeded today's large-scale structure, reveal what drives the accelerating expansion
+    of the universe, and precisely measure the combined mass of neutrinos.
   figure: /assets/img/papers/2026arXiv261035945W.png
 - bibcode: 2026ascl.soft09004A
   title: 'DiffstarPop: Population modeling of galaxy star-formation histories'
@@ -55,7 +67,11 @@
   url: https://ui.adsabs.harvard.edu/abs/2026ascl.soft09004A
   arxiv: null
   doi: null
-  summary: ''
+  summary: A software package called DiffstarPop generates realistic populations of galaxy star-formation
+    histories from the growth histories of their dark matter halos, including the chance that each galaxy
+    has stopped forming stars. Galaxies at the centers of halos and satellites orbiting within them are
+    treated separately, and ready-made settings are provided to match the IllustrisTNG, Galacticus, and
+    UniverseMachine models.
   figure: null
 - bibcode: 2026OJAp....970875W
   title: 'The Curious Case of Centaurus A: On the Subject of the Quenched satellites'
